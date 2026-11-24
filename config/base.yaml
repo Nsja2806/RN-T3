@@ -1,0 +1,33 @@
+# =============================================================================
+# Configuración Global del Proyecto - Sistema Integrado de Transporte (RN-T3)
+# =============================================================================
+# Todos los módulos heredan este archivo y lo fusionan con su config específico.
+
+project:
+  name: "sistema_integrado_transporte"
+  version: "0.1.0"
+  offline_mode: true
+
+reproducibility:
+  seed: 42
+  n_seeds_eval: 30
+  seed_list_start: 42
+  deterministic_torch: true
+
+paths:
+  data_raw_dir: "data/raw"
+  data_processed_dir: "data/processed"
+  models_dir: "models"
+  reports_dir: "reports"
+  figures_dir: "reports/figures"
+  metrics_dir: "reports/metrics"
+
+runtime:
+  device: "auto" # "auto", "cpu", "cuda"
+  num_workers: 0 # 0 garantiza reproducibilidad y compatibilidad en Windows/Linux
+  demo_max_seconds: 60
+
+streamlit:
+  app_entrypoint: "app/main.py"
+  page_title: "Sistema Integrado de Transporte - RN-T3"
+  layout: "wide"

@@ -1,0 +1,88 @@
+# =============================================================================
+# Configuración Módulo 1 (M1): Pronóstico de Demanda y Planificación de Flota
+# =============================================================================
+
+module:
+  id: "m1"
+  name: "modulo1_demanda"
+  description: "Pronóstico probabilístico de demanda de pasajeros y dimensionamiento de flota/conductores."
+
+paths:
+  raw_dir: "data/raw/m1"
+  processed_dir: "data/processed/m1"
+  model_dir: "models/m1"
+  figures_dir: "reports/figures/m1"
+  metrics_file: "reports/metrics/m1_metrics.json"
+  eval30_csv: "reports/metrics/m1_eval30.csv"
+  eval30_json: "reports/metrics/m1_eval30.json"
+
+data:
+  datetime_col: "timestamp"
+  target_col: "demand"
+  frequency: "1h" # Frecuencia temporal de la serie
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  scaler: "standard" # "standard", "minmax", "robust"
+
+time_series:
+  lookback_window: 168 # 7 días en resolución horaria
+  forecast_horizon: 24 # Horizonte de pronóstico (24 horas)
+  stride: 1
+  seasonal_periods:
+    - 24
+    - 168
+  lag_features:
+    - 1
+    - 2
+    - 24
+    - 48
+    - 168
+  rolling_windows:
+    - 3
+    - 6
+    - 24
+  quantiles:
+    - 0.10
+    - 0.50
+    - 0.90
+
+model:
+  architecture: "gru_quantile" # "mlp", "lstm", "gru_quantile", "tcn"
+  hidden_size: 64
+  num_layers: 2
+  dropout: 0.20
+
+training:
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 50
+  early_stopping_patience: 8
+  gradient_clip_norm: 1.0
+  loss: "pinball"
+  modes:
+    demo:
+      epochs: 2
+      max_samples: 512
+      n_seeds: 1
+    single:
+      epochs: 50
+      max_samples: null
+      n_seeds: 1
+    eval30:
+      epochs: 50
+      max_samples: null
+      n_seeds: 30
+
+fleet_business:
+  bus_capacity_passengers: 45
+  target_occupancy_ratio: 0.85
+  service_level_quantile: 0.90 # Cuantil usado para dimensionamiento conservador
+  cycle_time_minutes: 60 # Tiempo promedio de vuelta completa por vehículo
+  reserve_fleet_ratio: 0.10 # Porcentaje de flota en reserva/mantenimiento
+  max_driver_shift_hours: 8.0 # Jornada laboral máxima por conductor
+  mandatory_break_minutes: 30 # Descanso obligatorio por turno
+  operating_hours_per_day: 18.0 # Ventana de operación diaria del servicio
+  cost_per_bus_hour_usd: 45.0
+  cost_per_unmet_passenger_usd: 4.50

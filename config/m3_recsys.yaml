@@ -1,0 +1,84 @@
+# =============================================================================
+# Configuración Módulo 3 (M3): Sistema de Recomendación de Destinos (RecSys)
+# =============================================================================
+
+module:
+  id: "m3"
+  name: "modulo3_recsys"
+  description: "Recomendación personalizada de destinos con NCF / Two-Towers y optimización de campañas."
+
+paths:
+  raw_dir: "data/raw/m3"
+  processed_dir: "data/processed/m3"
+  model_dir: "models/m3"
+  figures_dir: "reports/figures/m3"
+  metrics_file: "reports/metrics/m3_metrics.json"
+  eval30_csv: "reports/metrics/m3_eval30.csv"
+  eval30_json: "reports/metrics/m3_eval30.json"
+
+data:
+  user_col: "user_id"
+  item_col: "destination_id"
+  rating_col: "interaction_score"
+  timestamp_col: "timestamp"
+  min_user_interactions: 3
+  min_item_interactions: 3
+  negative_sampling_ratio: 4 # Negativos por cada interacción positiva
+  split_strategy: "leave_one_out" # "leave_one_out" o "temporal"
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+recommendation:
+  top_k: 5
+  eval_k_values:
+    - 3
+    - 5
+    - 10
+  diversity_lambda: 0.20 # Factor de re-ranking (MMR) para balancear relevancia y diversidad
+  cold_start_fallback: "popularity" # "popularity" o "content_features"
+
+model:
+  architecture: "two_towers" # "mf", "ncf", "two_towers"
+  embedding_dim: 32
+  user_tower_dims:
+    - 64
+    - 32
+  item_tower_dims:
+    - 64
+    - 32
+  ncf_mlp_dims:
+    - 64
+    - 32
+    - 16
+  dropout: 0.20
+  temperature: 0.07 # Temperatura para similitud coseno en Two-Towers
+
+training:
+  batch_size: 128
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 30
+  early_stopping_patience: 6
+  loss: "bce_with_logits" # "bce_with_logits", "bpr", "infonce"
+  modes:
+    demo:
+      epochs: 2
+      max_samples: 512
+      n_seeds: 1
+    single:
+      epochs: 30
+      max_samples: null
+      n_seeds: 1
+    eval30:
+      epochs: 30
+      max_samples: null
+      n_seeds: 30
+
+campaign_business:
+  campaign_budget_usd: 5000.0
+  cost_per_contact_usd: 0.50
+  discount_rate: 0.15
+  avg_ticket_value_usd: 120.0
+  min_conversion_prob_threshold: 0.25
+  max_contacts_per_user: 2

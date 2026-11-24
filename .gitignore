@@ -221,3 +221,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Raw datasets (excluded from Git; preserve directory structure via .gitkeep)
+data/raw/*
+!data/raw/m1/
+!data/raw/m2/
+!data/raw/m3/
+data/raw/m1/*
+data/raw/m2/*
+data/raw/m3/*
+!data/raw/m1/.gitkeep
+!data/raw/m2/.gitkeep
+!data/raw/m3/.gitkeep
+
+
+

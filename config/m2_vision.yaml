@@ -1,0 +1,97 @@
+# =============================================================================
+# Configuración Módulo 2 (M2): Clasificación de Conducción Distractiva (Visión)
+# =============================================================================
+
+module:
+  id: "m2"
+  name: "modulo2_vision"
+  description: "Detección de conducción distractiva mediante CNN/Transfer Learning y explicabilidad Grad-CAM."
+
+paths:
+  raw_dir: "data/raw/m2"
+  processed_dir: "data/processed/m2"
+  model_dir: "models/m2"
+  figures_dir: "reports/figures/m2"
+  metrics_file: "reports/metrics/m2_metrics.json"
+  eval30_csv: "reports/metrics/m2_eval30.csv"
+  eval30_json: "reports/metrics/m2_eval30.json"
+
+data:
+  image_size:
+    - 224
+    - 224
+  channels: 3
+  num_classes: 10
+  safe_class_id: 0 # Clase correspondiente a conducción segura (c0)
+  class_names:
+    - "c0_conduccion_segura"
+    - "c1_mensajeando_derecha"
+    - "c2_telefono_derecha"
+    - "c3_mensajeando_izquierda"
+    - "c4_telefono_izquierda"
+    - "c5_operando_radio"
+    - "c6_bebiendo"
+    - "c7_alcanzando_atras"
+    - "c8_cabello_maquillaje"
+    - "c9_hablando_pasajero"
+  normalization:
+    mean:
+      - 0.485
+      - 0.456
+      - 0.406
+    std:
+      - 0.229
+      - 0.224
+      - 0.225
+  deduplication:
+    method: "phash" # Detección de duplicados/casi-duplicados antes del split
+    hamming_threshold: 6
+    group_by_driver: true # Evita fuga de información (data leakage) entre splits
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+augmentation:
+  horizontal_flip: false # Desactivado por defecto: mano derecha vs izquierda cambia la etiqueta
+  rotation_degrees: 10
+  color_jitter_brightness: 0.20
+  color_jitter_contrast: 0.20
+
+alerting:
+  distraction_prob_threshold: 0.55 # Umbral de probabilidad acumulada de distracción para disparar alerta
+  high_risk_classes:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 7
+  consecutive_frames_trigger: 3
+
+model:
+  architecture: "mobilenet_v3_small" # "custom_cnn", "resnet18", "mobilenet_v3_small", "efficientnet_b0"
+  pretrained_local_weights: null # Ruta local opcional a pesos preentrenados (offline first)
+  freeze_backbone_epochs: 3
+  dropout: 0.30
+  gradcam_target_layer: "features"
+
+training:
+  batch_size: 32
+  learning_rate: 0.0005
+  backbone_lr_multiplier: 0.10
+  weight_decay: 0.0001
+  epochs: 20
+  early_stopping_patience: 5
+  label_smoothing: 0.05
+  modes:
+    demo:
+      epochs: 2
+      max_samples: 128
+      n_seeds: 1
+    single:
+      epochs: 20
+      max_samples: null
+      n_seeds: 1
+    eval30:
+      epochs: 20
+      max_samples: null
+      n_seeds: 30
