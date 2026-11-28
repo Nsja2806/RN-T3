@@ -1,57 +1,188 @@
 # =============================================================================
 # Configuración Módulo 1 (M1): Pronóstico de Demanda y Planificación de Flota
+# Contexto: Transporte Intermunicipal de Pasajeros por Carretera en Colombia
 # =============================================================================
 
 module:
   id: "m1"
   name: "modulo1_demanda"
-  description: "Pronóstico probabilístico de demanda de pasajeros y dimensionamiento de flota/conductores."
+  description: "Pronóstico diario probabilístico de demanda intermunicipal y dimensionamiento de flota/conductores en Colombia."
 
 paths:
   raw_dir: "data/raw/m1"
+  divipola_raw_file: "data/raw/m1/divipola.csv"
+  raw_daily_cache_file: "data/raw/m1/supertransporte_8rutas_diario_2021_2023.csv"
+  raw_inspection_report: "reports/m1_raw_inspection.txt"
   processed_dir: "data/processed/m1"
+  processed_dataset_file: "data/processed/m1/demanda_diaria.parquet"
+  calendar_exog_file: "data/processed/m1/calendario_exogenas.csv"
+  preprocess_summary_file: "reports/m1_preprocess_summary.json"
   model_dir: "models/m1"
   figures_dir: "reports/figures/m1"
   metrics_file: "reports/metrics/m1_metrics.json"
   eval30_csv: "reports/metrics/m1_eval30.csv"
   eval30_json: "reports/metrics/m1_eval30.json"
 
+socrata_api:
+  divipola_url: "https://www.datos.gov.co/resource/gdxc-w37w.csv"
+  supertransporte_url: "https://www.datos.gov.co/resource/eh75-8ah6.csv"
+  divipola_limit: 2000
+  sample_limit: 5
+  top_routes_pool_limit: 500
+  top_routes_display: 25
+  active_days_batch_size: 5
+  high_volume_reverse_rank_max: 50
+  daily_query_limit: 50000
+  timeout_seconds: 120
+  max_retries: 3
+
 data:
-  datetime_col: "timestamp"
-  target_col: "demand"
-  frequency: "1h" # Frecuencia temporal de la serie
-  train_ratio: 0.70
-  val_ratio: 0.15
-  test_ratio: 0.15
+  frequency: "1D" # Serie diaria por ruta dirigida (origen -> destino)
+  datetime_col: "fecha_despacho"
+  target_col: "pasajeros"
+  dispatches_col: "despachos"
+  origin_col: "municipio_origen_ruta"
+  destination_col: "municipio_destino_ruta"
+  dispatch_type_col: "tipo_despacho"
+  dispatch_type_origin_value: "ORIGEN"
+  vehicle_class_col: "clase_vehiculo"
+  service_level_col: "nivel_servicio"
+  model_scope: "global" # Un único modelo global entrenado sobre las 8 series dirigidas
+  calendar_country: "CO"
+  calendar_extra_future_days: 35 # Extiende calendario offline más allá de test_end para inferencia a 30 días
+
+  # 4 corredores Ida <-> Vuelta confirmados = 8 series dirigidas
+  selected_routes:
+    - route_id: "11001_50001"
+      corridor_id: "bogota_villavicencio"
+      direction: "ida"
+      origin_code: "11001"
+      origin_name: "BOGOTÁ, D.C."
+      destination_code: "50001"
+      destination_name: "VILLAVICENCIO"
+      route_label: "Bogotá, D.C. -> Villavicencio"
+      predominant_vehicle: "BUS"
+      cycle_time_hours: 8.0
+      distance_km_est: 120
+    - route_id: "50001_11001"
+      corridor_id: "bogota_villavicencio"
+      direction: "vuelta"
+      origin_code: "50001"
+      origin_name: "VILLAVICENCIO"
+      destination_code: "11001"
+      destination_name: "BOGOTÁ, D.C."
+      route_label: "Villavicencio -> Bogotá, D.C."
+      predominant_vehicle: "BUS"
+      cycle_time_hours: 8.0
+      distance_km_est: 120
+    - route_id: "63001_66001"
+      corridor_id: "armenia_pereira"
+      direction: "ida"
+      origin_code: "63001"
+      origin_name: "ARMENIA"
+      destination_code: "66001"
+      destination_name: "PEREIRA"
+      route_label: "Armenia -> Pereira"
+      predominant_vehicle: "MICROBUS"
+      cycle_time_hours: 3.0
+      distance_km_est: 46
+    - route_id: "66001_63001"
+      corridor_id: "armenia_pereira"
+      direction: "vuelta"
+      origin_code: "66001"
+      origin_name: "PEREIRA"
+      destination_code: "63001"
+      destination_name: "ARMENIA"
+      route_label: "Pereira -> Armenia"
+      predominant_vehicle: "MICROBUS"
+      cycle_time_hours: 3.0
+      distance_km_est: 46
+    - route_id: "52001_52356"
+      corridor_id: "pasto_ipiales"
+      direction: "ida"
+      origin_code: "52001"
+      origin_name: "PASTO"
+      destination_code: "52356"
+      destination_name: "IPIALES"
+      route_label: "Pasto -> Ipiales"
+      predominant_vehicle: "MICROBUS"
+      cycle_time_hours: 4.5
+      distance_km_est: 83
+    - route_id: "52356_52001"
+      corridor_id: "pasto_ipiales"
+      direction: "vuelta"
+      origin_code: "52356"
+      origin_name: "IPIALES"
+      destination_code: "52001"
+      destination_name: "PASTO"
+      route_label: "Ipiales -> Pasto"
+      predominant_vehicle: "MICROBUS"
+      cycle_time_hours: 4.5
+      distance_km_est: 83
+    - route_id: "11001_76001"
+      corridor_id: "bogota_cali"
+      direction: "ida"
+      origin_code: "11001"
+      origin_name: "BOGOTÁ, D.C."
+      destination_code: "76001"
+      destination_name: "SANTIAGO DE CALI"
+      route_label: "Bogotá, D.C. -> Santiago de Cali"
+      predominant_vehicle: "BUS"
+      cycle_time_hours: 24.0
+      distance_km_est: 460
+    - route_id: "76001_11001"
+      corridor_id: "bogota_cali"
+      direction: "vuelta"
+      origin_code: "76001"
+      origin_name: "SANTIAGO DE CALI"
+      destination_code: "11001"
+      destination_name: "BOGOTÁ, D.C."
+      route_label: "Santiago de Cali -> Bogotá, D.C."
+      predominant_vehicle: "BUS"
+      cycle_time_hours: 24.0
+      distance_km_est: 460
+
+  # Opción A confirmada: bloque continuo sin huecos 2021-01-01 a 2023-12-31 (1,095 días)
+  split_dates:
+    train_start: "2021-01-01"
+    train_end: "2022-12-31"
+    val_start: "2023-01-01"
+    val_end: "2023-06-30"
+    test_start: "2023-07-01"
+    test_end: "2023-12-31"
+
+  train_ratio: 0.6667
+  val_ratio: 0.1653
+  test_ratio: 0.1680
   scaler: "standard" # "standard", "minmax", "robust"
 
 time_series:
-  lookback_window: 168 # 7 días en resolución horaria
-  forecast_horizon: 24 # Horizonte de pronóstico (24 horas)
+  lookback_window: 28 # 4 semanas de historia diaria
+  forecast_horizon: 30 # Pronóstico a 30 días
   stride: 1
-  seasonal_periods:
-    - 24
-    - 168
   lag_features:
     - 1
-    - 2
-    - 24
-    - 48
-    - 168
+    - 7
+    - 14
+    - 28
+    - 30
   rolling_windows:
-    - 3
-    - 6
-    - 24
+    - 7
+    - 14
+    - 28
+  seasonal_periods:
+    - 7
+    - 365
   quantiles:
-    - 0.10
     - 0.50
     - 0.90
 
 model:
-  architecture: "gru_quantile" # "mlp", "lstm", "gru_quantile", "tcn"
-  hidden_size: 64
-  num_layers: 2
-  dropout: 0.20
+  architecture: "gru" # Optimizado para CPU ("gru", "lstm", "mlp")
+  hidden_size: 32
+  num_layers: 1
+  dropout: 0.15
+  route_embedding_dim: 8
 
 training:
   batch_size: 64
@@ -60,10 +191,15 @@ training:
   epochs: 50
   early_stopping_patience: 8
   gradient_clip_norm: 1.0
-  loss: "pinball"
+  loss: "poisson_pinball" # Pérdida híbrida: conteo (poisson_nll para media/P50) + pinball (P90)
+  count_loss: "poisson_nll"
+  quantile_loss: "pinball"
+  count_loss_weight: 0.50
+  pinball_loss_weight: 0.50
+  pinball_quantile: 0.90
   modes:
     demo:
-      epochs: 2
+      epochs: 3
       max_samples: 512
       n_seeds: 1
     single:
@@ -76,13 +212,53 @@ training:
       n_seeds: 30
 
 fleet_business:
-  bus_capacity_passengers: 45
-  target_occupancy_ratio: 0.85
-  service_level_quantile: 0.90 # Cuantil usado para dimensionamiento conservador
-  cycle_time_minutes: 60 # Tiempo promedio de vuelta completa por vehículo
-  reserve_fleet_ratio: 0.10 # Porcentaje de flota en reserva/mantenimiento
-  max_driver_shift_hours: 8.0 # Jornada laboral máxima por conductor
-  mandatory_break_minutes: 30 # Descanso obligatorio por turno
-  operating_hours_per_day: 18.0 # Ventana de operación diaria del servicio
-  cost_per_bus_hour_usd: 45.0
-  cost_per_unmet_passenger_usd: 4.50
+  currency: "COP"
+  default_vehicle_class: "BUS"
+  bus_capacity_passengers: 40 # Capacidad estándar de referencia (BUS intermunicipal)
+  vehicle_capacities_passengers:
+    BUS: 40
+    BUSETA: 26
+    MICROBUS: 19
+    CAMIONETA: 9
+    CAMPERO: 10
+    AUTOMOVIL: 4
+  route_predominant_vehicle:
+    "11001_50001": "BUS"
+    "50001_11001": "BUS"
+    "63001_66001": "MICROBUS"
+    "66001_63001": "MICROBUS"
+    "52001_52356": "MICROBUS"
+    "52356_52001": "MICROBUS"
+    "11001_76001": "BUS"
+    "76001_11001": "BUS"
+  target_occupancy_ratio: 0.80 # Factor de ocupación objetivo (80%)
+  service_level_quantile: 0.90 # Cuantil P90 para dimensionamiento con nivel de servicio seguro
+  default_cycle_time_hours: 8.0
+  route_cycle_time_hours:
+    "11001_50001": 8.0
+    "50001_11001": 8.0
+    "63001_66001": 3.0
+    "66001_63001": 3.0
+    "52001_52356": 4.5
+    "52356_52001": 4.5
+    "11001_76001": 24.0
+    "76001_11001": 24.0
+  turnaround_buffer_hours: 1.0 # Tiempo mínimo de alistamiento/descanso en terminal entre despachos
+  operating_hours_per_day: 18.0 # Ventana operativa diaria de despachos en terminal (horas)
+  max_driver_shift_hours: 8.0 # Jornada ordinaria diaria máxima por conductor (horas)
+  max_weekly_driver_hours: 44.0 # Tope semanal legal de jornada laboral en Colombia (horas)
+  mandatory_break_minutes: 45 # Pausa activa / descanso obligatorio por turno (minutos)
+  driver_absenteeism_rate: 0.12 # Factor de cobertura por descansos dominicales, vacaciones e incapacidades
+  reserve_fleet_ratio: 0.10 # Reserva técnica por mantenimiento preventivo/correctivo
+  costs_cop:
+    cost_per_dispatch_by_vehicle_cop:
+      BUS: 1250000
+      BUSETA: 820000
+      MICROBUS: 620000
+      CAMIONETA: 410000
+      CAMPERO: 390000
+      AUTOMOVIL: 260000
+    driver_daily_shift_cost_cop: 135000
+    reserve_bus_daily_fixed_cost_cop: 180000
+    unmet_passenger_penalty_cop: 55000
+    average_ticket_cop: 48000

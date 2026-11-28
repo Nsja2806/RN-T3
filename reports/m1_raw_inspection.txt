@@ -1,0 +1,243 @@
+REPORTE DE INSPECCIÓN REMOTA VÍA API SOCRATA (SoQL) - MÓDULO 1 (DEMANDA INTERMUNICIPAL)
+Fecha de ejecución (UTC): 2026-11-28 04:35:38 UTC
+Endpoint SuperTransporte: https://www.datos.gov.co/resource/eh75-8ah6.csv
+Endpoint DIVIPOLA:        https://www.datos.gov.co/resource/gdxc-w37w.csv
+
+====================================================================================================
+1. DESCARGA Y VALIDACIÓN DEL CATÁLOGO OFICIAL DIVIPOLA (DANE)
+====================================================================================================
+Archivo guardado en: C:\RN-T3\data\raw\m1\divipola.csv
+Total filas DIVIPOLA descargadas: 1,122
+Total códigos municipales únicos normalizados (5 dígitos): 1,122
+Columnas exactas DIVIPOLA API: ['cod_dpto', 'dpto', 'cod_mpio', 'nom_mpio', 'tipo_municipio', 'longitud', 'latitud']
+
+====================================================================================================
+2. MUESTRA DE 5 FILAS Y ESQUEMA EXACTO DE COLUMNAS EN LA API DE SUPERTRANSPORTE
+====================================================================================================
+Cantidad de columnas confirmadas: 10
+  01. terminal                   (tipo Socrata: text)
+  02. clase_vehiculo             (tipo Socrata: text)
+  03. nivel_servicio             (tipo Socrata: text)
+  04. municipio_origen_ruta      (tipo Socrata: text)
+  05. municipio_destino_ruta     (tipo Socrata: text)
+  06. fecha_despacho             (tipo Socrata: floating_timestamp)
+  07. hora_despacho              (tipo Socrata: text)
+  08. tipo_despacho              (tipo Socrata: text)
+  09. despachos                  (tipo Socrata: number)
+  10. pasajeros                  (tipo Socrata: number)
+
+Muestra cruda ($limit=5):
+       terminal clase_vehiculo nivel_servicio municipio_origen_ruta municipio_destino_ruta          fecha_despacho hora_despacho tipo_despacho despachos pasajeros
+   T.T. DE CALI         BUSETA         BASICO                 76001                  76306 2022-06-14T00:00:00.000            13        ORIGEN         1         4
+  T.T. DE TULÚA            BUS         BASICO                 76834                  76001 2022-01-29T00:00:00.000            14        ORIGEN         1        14
+  T.T. DE TULÚA         BUSETA         BASICO                 76834                  76111 2022-09-19T00:00:00.000            06        ORIGEN         1        12
+T.T. DE DUITAMA            BUS           LUJO                 15759                  11001 2022-06-28T00:00:00.000            12      TRANSITO         1        19
+   T.T. DE CALI            BUS           LUJO                 76001                  54001 2022-03-21T00:00:00.000            06        ORIGEN         1         8
+
+====================================================================================================
+3. VALIDACIÓN REAL DE CATEGORÍAS EN SoQL (GROUP BY)
+====================================================================================================
+
+Categorías exactas en 'tipo_despacho':
+tipo_despacho total_registros total_pasajeros total_despachos
+       ORIGEN        39124098       334120793        40536104
+     TRANSITO        10078714        86373986        10302996
+
+Categorías exactas en 'clase_vehiculo':
+clase_vehiculo total_registros total_pasajeros total_despachos
+           BUS        17791956       204027774        18283007
+      MICROBUS        17751532       136843693        18387545
+        BUSETA         5568838        37969426         5706638
+     CAMIONETA         5542894        30730171         5748514
+     AUTOMOVIL         1680520         5320277         1782048
+       CAMPERO          867072         5603438          931348
+
+Categorías exactas en 'nivel_servicio':
+      nivel_servicio total_registros total_pasajeros total_despachos
+                LUJO        30643075       247947388        31648537
+              BASICO        18554259       172423586        19185009
+PREFERENCIAL DE LUJO            5478          123805            5554
+
+-> Valor exacto validado para despachos en origen: tipo_despacho = 'ORIGEN'
+
+====================================================================================================
+4. VOLUMEN GLOBAL, RANGO HISTÓRICO Y AUDITORÍA DE ANOMALÍAS
+====================================================================================================
+Total registros en dataset remoto: 49,202,812
+MIN(fecha_despacho):                   2019-08-04T00:00:00.000
+MAX(fecha_despacho):                   6202-04-13T00:00:00.000
+SUM(pasajeros) global:             420,494,779
+SUM(despachos) global:            50,839,100
+
+Conteo de anomalías numéricas, nulos y bucles:
+  - pasajeros < 0                         :            0 filas (0.000%)
+  - pasajeros = 0                         :    6,576,784 filas (13.367%)
+  - pasajeros <= 0                        :    6,576,784 filas (13.367%)
+  - pasajeros IS NULL                     :            0 filas (0.000%)
+  - despachos < 0                         :            0 filas (0.000%)
+  - despachos = 0                         :            0 filas (0.000%)
+  - despachos <= 0                        :            0 filas (0.000%)
+  - despachos IS NULL                     :            0 filas (0.000%)
+  - fecha_despacho IS NULL                :            0 filas (0.000%)
+  - Bucles municipio_origen_ruta = municipio_destino_ruta:      319,838 filas (0.650%)
+
+Auditoría de formato (5 dígitos) y validez DANE en códigos DIVIPOLA:
+  Columna 'municipio_origen_ruta' (369 valores distintos):
+    * Filas con string crudo != 5 dígitos:      0 (0.000%) | códigos distintos=0
+    * Filas fuera de DIVIPOLA sin zfill(5):     0 (0.000%)
+    * Filas fuera de DIVIPOLA aún con zfill(5): 0 (0.000%) | códigos huérfanos=0
+  Columna 'municipio_destino_ruta' (839 valores distintos):
+    * Filas con string crudo != 5 dígitos:      0 (0.000%) | códigos distintos=0
+    * Filas fuera de DIVIPOLA sin zfill(5):     24,364 (0.050%)
+    * Filas fuera de DIVIPOLA aún con zfill(5): 24,364 (0.050%) | códigos huérfanos=6
+      Top códigos huérfanos no presentes en DIVIPOLA: [('77104', 11651), ('77103', 8817), ('77105', 1893), ('77106', 1546), ('77101', 354), ('77102', 103)]
+
+====================================================================================================
+5. TOP 25 RUTAS NACIONALES EN ORIGEN (tipo_despacho = 'ORIGEN', ORDEN POR SUM(pasajeros) DESC)
+====================================================================================================
+Criterio booleano 'inversa_alto_vol': True si la ruta inversa (destino -> origen) está en el Top 50 nacional de ORIGEN o supera 916,300 pasajeros.
+
+ #                                    origen                                   destino total_pasajeros total_despachos  fecha_min  fecha_max  dias_activos vehiculo_principal  inversa_alto_vol     inversa_detalle
+ 1               MEDELLÍN, ANTIOQUIA (05001)               RIONEGRO, ANTIOQUIA (05615)       4,485,297         537,708 2021-01-01 2026-04-04          1512          BUS (42%)             False      0 pas (>500/0)
+ 2 SANTIAGO DE CALI, VALLE DEL CAUCA (76001)            PUEBLOVIEJO, MAGDALENA (47570)       3,796,646         497,042 2020-12-31 2026-04-07          1499          BUS (76%)             False      0 pas (>500/0)
+ 3               VILLAVICENCIO, META (50001)        BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)       3,686,831         292,407 2020-12-30 2026-03-28          1530          BUS (71%)              True 1,580,633 pas (#37)
+ 4                PEREIRA, RISARALDA (66001)                  ARMENIA, QUINDÍO (63001)       3,275,967         271,159 2021-01-01 2026-04-06          1516     MICROBUS (79%)              True 1,730,315 pas (#31)
+ 5        BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)              SIBATÉ, CUNDINAMARCA (25740)       3,200,710         891,946 2020-12-30 2026-04-06          1533     MICROBUS (57%)             False      0 pas (>500/0)
+ 6                  ARMENIA, QUINDÍO (63001)               LA TEBAIDA, QUINDÍO (63401)       3,162,340         345,873 2020-03-15 2026-04-07          1523       BUSETA (50%)             False      0 pas (>500/0)
+ 7                PEREIRA, RISARALDA (66001)    SANTA ROSA DE CABAL, RISARALDA (66682)       2,965,225         716,893 2021-01-01 2026-04-06          1513     MICROBUS (63%)             False      0 pas (>500/0)
+ 8               MEDELLÍN, ANTIOQUIA (05001)              MARINILLA, ANTIOQUIA (05440)       2,499,335         154,531 2021-01-01 2026-04-04          1508          BUS (91%)             False      0 pas (>500/0)
+ 9                    IBAGUÉ, TOLIMA (73001)        BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)       2,486,542         170,012 2021-01-01 2026-04-06          1517          BUS (47%)              True 1,243,782 pas (#63)
+10                   DUITAMA, BOYACÁ (15238)                  SOGAMOSO, BOYACÁ (15759)       2,485,000         297,365 2021-01-01 2026-04-06          1517    MICROBUS (100%)              True 1,851,406 pas (#23)
+11            GIRARDOT, CUNDINAMARCA (25307)        BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)       2,426,672         264,319 2020-12-31 2026-04-06          1529          BUS (98%)              True 1,475,227 pas (#47)
+12 SANTIAGO DE CALI, VALLE DEL CAUCA (76001)            YUMBO, VALLE DEL CAUCA (76892)       2,387,942         366,718 2021-01-01 2026-04-07          1484     MICROBUS (87%)             False      0 pas (>500/0)
+13                     PASTO, NARIÑO (52001)                   IPIALES, NARIÑO (52356)       2,264,845         198,662 2019-10-04 2026-04-07          1546     MICROBUS (66%)              True 2,246,306 pas (#14)
+14                   IPIALES, NARIÑO (52356)                     PASTO, NARIÑO (52001)       2,246,306         200,437 2021-01-01 2026-04-07          1541     MICROBUS (63%)              True 2,264,845 pas (#13)
+15                PEREIRA, RISARALDA (66001)          CARTAGO, VALLE DEL CAUCA (76147)       2,142,327         183,553 2021-01-01 2026-04-06          1523     MICROBUS (93%)             False      0 pas (>500/0)
+16               APARTADÓ, ANTIOQUIA (05045)                  TURBO, ANTIOQUIA (05837)       2,126,615         572,794 2020-12-31 2026-04-06          1530      CAMPERO (34%)             False      0 pas (>500/0)
+17      CARTAGENA DE INDIAS, BOLÍVAR (13001)                   ARJONA, BOLÍVAR (13052)       2,077,058         282,953 2021-01-01 2026-04-06          1519         BUS (100%)             False      0 pas (>500/0)
+18                  SOGAMOSO, BOYACÁ (15759)        BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)       2,051,232         177,708 2020-12-31 2026-04-06          1529          BUS (82%)              True 1,418,517 pas (#49)
+19      CARTAGENA DE INDIAS, BOLÍVAR (13001)           BARRANQUILLA, ATLÁNTICO (08001)       1,960,217         156,194 2020-12-30 2026-04-06          1522          BUS (81%)              True 1,329,932 pas (#57)
+20               APARTADÓ, ANTIOQUIA (05045)              CHIGORODÓ, ANTIOQUIA (05172)       1,872,803         402,314 2020-12-30 2026-04-06          1529     MICROBUS (54%)             False      0 pas (>500/0)
+21               MEDELLÍN, ANTIOQUIA (05001)                 GUARNE, ANTIOQUIA (05318)       1,871,335         115,192 2021-01-01 2026-04-04          1509         BUS (100%)             False      0 pas (>500/0)
+22 SANTIAGO DE CALI, VALLE DEL CAUCA (76001)          JAMUNDÍ, VALLE DEL CAUCA (76364)       1,865,484         268,583 2021-01-01 2026-04-07          1504     MICROBUS (41%)             False      0 pas (>500/0)
+23                  SOGAMOSO, BOYACÁ (15759)                   DUITAMA, BOYACÁ (15238)       1,851,406         289,103 2020-12-31 2026-04-06          1526    MICROBUS (100%)              True 2,485,000 pas (#10)
+24 SANTIAGO DE CALI, VALLE DEL CAUCA (76001)                      NEIVA, HUILA (41001)       1,843,172         216,954 2021-01-01 2026-04-07          1475          BUS (89%)             False  180,101 pas (#417)
+25        BOGOTÁ, D.C., BOGOTÁ, D.C. (11001) SANTIAGO DE CALI, VALLE DEL CAUCA (76001)       1,832,600          90,103 2020-12-30 2026-04-06          1498         BUS (100%)              True 1,760,550 pas (#28)
+
+TOP 15 CORREDORES BIDIRECCIONALES (PARES IDA <-> VUELTA CON AMBOS SENTIDOS EN ALTO VOLUMEN):
+ #                                   corredor_A                                   corredor_B pasajeros_par         pas_A_B         pas_B_A ratio_simetria
+ 1           BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)                  VILLAVICENCIO, META (50001)     5,267,464 1,580,633 (#37)  3,686,831 (#3)           0.43
+ 2                     ARMENIA, QUINDÍO (63001)                   PEREIRA, RISARALDA (66001)     5,006,282 1,730,315 (#31)  3,275,967 (#4)           0.53
+ 3                        PASTO, NARIÑO (52001)                      IPIALES, NARIÑO (52356)     4,511,151 2,264,845 (#13) 2,246,306 (#14)           0.99
+ 4                      DUITAMA, BOYACÁ (15238)                     SOGAMOSO, BOYACÁ (15759)     4,336,406 2,485,000 (#10) 1,851,406 (#23)           0.75
+ 5           BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)               GIRARDOT, CUNDINAMARCA (25307)     3,901,899 1,475,227 (#47) 2,426,672 (#11)           0.61
+ 6           BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)                       IBAGUÉ, TOLIMA (73001)     3,730,324 1,243,782 (#63)  2,486,542 (#9)           0.50
+ 7           BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)    SANTIAGO DE CALI, VALLE DEL CAUCA (76001)     3,593,150 1,832,600 (#25) 1,760,550 (#28)           0.96
+ 8           BOGOTÁ, D.C., BOGOTÁ, D.C. (11001)                     SOGAMOSO, BOYACÁ (15759)     3,469,749 1,418,517 (#49) 2,051,232 (#18)           0.69
+ 9              BARRANQUILLA, ATLÁNTICO (08001)         CARTAGENA DE INDIAS, BOLÍVAR (13001)     3,290,149 1,329,932 (#57) 1,960,217 (#19)           0.68
+10                      IPIALES, NARIÑO (52356)    SANTIAGO DE CALI, VALLE DEL CAUCA (76001)     3,261,855 1,520,544 (#41) 1,741,311 (#29)           0.87
+11    SANTIAGO DE CALI, VALLE DEL CAUCA (76001) GUADALAJARA DE BUGA, VALLE DEL CAUCA (76111)     3,144,190 1,412,689 (#50) 1,731,501 (#30)           0.82
+12               GIRARDOT, CUNDINAMARCA (25307)                       IBAGUÉ, TOLIMA (73001)     3,064,853 1,498,446 (#43) 1,566,407 (#38)           0.96
+13                        TUNJA, BOYACÁ (15001)                      DUITAMA, BOYACÁ (15238)     3,013,243 1,432,520 (#48) 1,580,723 (#36)           0.91
+14                       POPAYÁN, CAUCA (19001)    SANTIAGO DE CALI, VALLE DEL CAUCA (76001)     2,802,115 1,522,165 (#40) 1,279,950 (#61)           0.84
+15 GUADALAJARA DE BUGA, VALLE DEL CAUCA (76111)               TULUÁ, VALLE DEL CAUCA (76834)     2,739,163 1,334,172 (#56) 1,404,991 (#51)           0.95
+
+====================================================================================================
+6. SERIE MENSUAL HISTÓRICA (tipo_despacho = 'ORIGEN') Y PROPUESTA DE CORTES TEMPORALES
+====================================================================================================
+anio_mes total_pasajeros total_despachos total_registros
+ 2019-08               0               3               3
+ 2019-10              35               3               3
+ 2019-12             872              37              35
+ 2020-01          17,349           1,460             834
+ 2020-02               0               1               1
+ 2020-03             273              43              43
+ 2020-04              13               5               5
+ 2020-06          19,677           2,631           1,246
+ 2020-07          10,079           1,386             700
+ 2020-08           2,011             238             153
+ 2020-09           1,984             424             298
+ 2020-10           1,844             284             147
+ 2020-11          17,874           2,497           1,695
+ 2020-12          48,747           8,097           5,948
+ 2021-01       3,908,527         663,079         640,117
+ 2021-02       3,598,716         635,109         612,330
+ 2021-03       4,555,061         741,673         715,844
+ 2021-04       3,582,625         611,747         588,804
+ 2021-05       1,934,106         355,605         347,323
+ 2021-06       3,839,739         616,790         597,503
+ 2021-07       4,812,670         721,721         698,784
+ 2021-08       5,280,984         750,584         729,512
+ 2021-09       5,234,477         747,533         724,472
+ 2021-10       5,970,446         788,487         764,326
+ 2021-11       5,827,236         771,196         745,395
+ 2021-12       7,753,740         852,416         824,065
+ 2022-01       7,002,398         821,751         794,288
+ 2022-02       5,484,548         736,467         700,773
+ 2022-03       6,079,480         808,289         783,741
+ 2022-04       6,730,504         798,868         774,750
+ 2022-05       5,957,542         816,268         767,329
+ 2022-06       6,497,530         800,783         776,182
+ 2022-07       7,479,735         849,974         825,033
+ 2022-08       7,171,888         855,263         826,810
+ 2022-09       6,919,194         836,310         811,598
+ 2022-10       7,466,849         858,652         831,902
+ 2022-11       7,062,508         825,450         798,788
+ 2022-12       8,871,043         916,608         889,038
+ 2023-01       7,851,013         857,124         833,337
+ 2023-02       5,952,586         756,683         734,073
+ 2023-03       6,966,743         876,252         819,950
+ 2023-04       7,428,329         869,163         805,627
+ 2023-05       6,794,743         870,468         833,650
+ 2023-06       7,543,613         842,309         815,024
+ 2023-07       8,255,216         879,330         845,829
+ 2023-08       7,602,969         863,442         845,741
+ 2023-09       6,866,578         815,170         802,420
+ 2023-10       7,457,994         844,972         840,737
+ 2023-11       6,912,304         788,638         787,855
+ 2023-12       8,636,335         859,381         859,078
+ 2024-02           6,572           1,643           1,233
+ 2024-03          13,304           3,326           2,463
+ 2024-04          13,341           3,333           2,483
+ 2024-05          17,369           3,869           2,934
+ 2024-06          15,943           3,705           2,744
+ 2024-07          15,292           3,640           2,711
+ 2024-08          13,903           3,448           2,588
+ 2024-09          12,442           3,040           2,219
+ 2024-10          12,848           3,292           2,358
+ 2024-11          52,632          11,593          10,217
+ 2024-12         153,444          23,002          20,371
+ 2025-01       8,696,817         920,834         879,658
+ 2025-02       6,668,169         811,195         776,450
+ 2025-03       7,324,826         875,768         840,659
+ 2025-04       7,819,966         874,507         837,069
+ 2025-05       7,203,618         885,153         846,751
+ 2025-06       8,023,308         883,368         847,191
+ 2025-07       7,992,950         903,457         862,905
+ 2025-08       7,976,216         899,190         861,246
+ 2025-09       7,258,632         864,460         834,029
+ 2025-10       7,762,829         875,098         844,518
+ 2025-11       7,407,281         832,849         796,397
+ 2025-12          74,415          14,086          10,710
+ 2026-01       8,364,333         863,389         833,707
+ 2026-02       6,236,800         762,857         736,942
+ 2026-03       6,790,811         810,867         787,522
+ 2026-04         781,979          74,468          72,881
+ 2202-02               6               1               1
+ 2222-09              13               1               1
+ 6202-04               7               1               1
+
+PROPUESTA TÉCNICA DE CORTES TEMPORALES (TRAIN / VAL / TEST):
+- Bloques continuos sin huecos mensuales (>= 38,366 reg/mes):
+  * 2021-01 a 2023-12 (36 meses consecutivos completos).
+  * 2025-01 a 2025-11 (11 meses consecutivos completos).
+  * 2026-01 a 2026-04 (4 meses consecutivos; 2026-04 parcial hasta 2026-04-07).
+- Meses con sub-registro severo, huecos de cargue o fechas erróneas (< 38,366 reg/mes, excluir): 2019-08, 2019-10, 2019-12, 2020-01, 2020-02, 2020-03, 2020-04, 2020-06, 2020-07, 2020-08, 2020-09, 2020-10, 2020-11, 2020-12, 2024-02..2024-12, 2025-12, 2202-02, 2222-09, 6202-04 (además de meses ausentes como 2024-01).
+- Opción A (Recomendada - sobre el bloque continuo más largo 2021-01..2023-12, 36 meses sin huecos, compatible con lookback=28d y horizon=30d):
+  * Train (24 meses): 2021-01-01  ->  2022-12-31
+  * Val   (6 meses):  2023-01-01  ->  2023-06-30
+  * Test  (6 meses):  2023-07-01  ->  2023-12-31
+- Opción B (Evaluación out-of-time reciente usando bloque limpio 2025-01..2025-11 sin cruzar el hueco 2024 ni 2025-12):
+  * Train (30 meses): 2021-01-01  ->  2023-06-30
+  * Val   (6 meses):  2023-07-01  ->  2023-12-31
+  * Test  (10 meses efectivos): 2025-02-01  ->  2025-11-30 (usando 2025-01-01.. como ventana de contexto inicial de 30d).
