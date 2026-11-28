@@ -68,10 +68,10 @@ def main() -> None:
             """
         )
 
-    st.info(
-        "Estado del proyecto: Estructura base MLOps inicializada. "
-        "Entrena los modelos con `python run.py train --module <m1|m2|m3> --mode demo` "
-        "y los pesos guardados en `models/` se consumirán automáticamente sin reentrenar."
+    st.success(
+        "✅ **Módulo 1 (Demanda, Flota y Conductores)** activo y verificado 100% offline "
+        "(`models/m1/gru_best.pt` + evaluación en 30 semillas). Selecciona **1 Demanda y Flota** "
+        "en la barra lateral para explorar pronósticos y escenarios operativos en tiempo real."
     )
 
 

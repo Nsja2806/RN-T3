@@ -1,0 +1,563 @@
+{
+  "generated_at_utc": "2026-11-28T06:33:23.784529+00:00",
+  "regulatory_parameters_used": {
+    "max_weekly_ordinary_hours": 42.0,
+    "max_daily_shift_hours": 10.0,
+    "second_driver_threshold_hours": 8.0,
+    "weekly_rest_factor": 1.1667,
+    "absenteeism_rate": 0.06,
+    "target_occupancy_ratio": 0.85,
+    "reserve_fleet_ratio": 0.1
+  },
+  "q1_and_q2_fleet_and_drivers_test": {
+    "gru_puntual_system": {
+      "n_days": 184,
+      "target_occupancy_ratio": 0.85,
+      "demand_multiplier": 1.0,
+      "reserve_fleet_ratio": 0.1,
+      "mean_daily_dispatches": 663.65,
+      "peak_daily_dispatches": 889,
+      "mean_operational_fleet": 174.32,
+      "p90_operational_fleet": 204.7,
+      "peak_operational_fleet": 234,
+      "mean_total_fleet_with_reserve": 193.43,
+      "p90_total_fleet_with_reserve": 227.7,
+      "peak_total_fleet_with_reserve": 258,
+      "mean_active_drivers_day": 365.99,
+      "peak_active_drivers_day": 497,
+      "mean_payroll_drivers_total": 458.25,
+      "peak_payroll_drivers_total": 621
+    },
+    "gru_p90_system": {
+      "n_days": 184,
+      "target_occupancy_ratio": 0.85,
+      "demand_multiplier": 1.0,
+      "reserve_fleet_ratio": 0.1,
+      "mean_daily_dispatches": 779.46,
+      "peak_daily_dispatches": 1086,
+      "mean_operational_fleet": 212.72,
+      "p90_operational_fleet": 256.5,
+      "peak_operational_fleet": 294,
+      "mean_total_fleet_with_reserve": 235.93,
+      "p90_total_fleet_with_reserve": 283.5,
+      "peak_total_fleet_with_reserve": 325,
+      "mean_active_drivers_day": 442.65,
+      "peak_active_drivers_day": 620,
+      "mean_payroll_drivers_total": 553.61,
+      "peak_payroll_drivers_total": 773
+    },
+    "gru_p90_by_corridor": {
+      "armenia_pereira": {
+        "vehicle_class": "MICROBUS",
+        "cycle_time_hours": 3.0,
+        "vueltas_por_vehiculo_dia": 6.0,
+        "mean_daily_dispatches": 267.23,
+        "peak_daily_dispatches": 387,
+        "mean_operational_fleet": 29.95,
+        "peak_operational_fleet": 44,
+        "mean_total_fleet_with_reserve": 33.37,
+        "peak_total_fleet_with_reserve": 49,
+        "mean_active_drivers_day": 61.06,
+        "peak_active_drivers_day": 88,
+        "mean_payroll_drivers_required": 76.8,
+        "peak_payroll_drivers_required": 110
+      },
+      "bogota_cali": {
+        "vehicle_class": "BUS",
+        "cycle_time_hours": 24.0,
+        "vueltas_por_vehiculo_dia": 0.5,
+        "mean_daily_dispatches": 101.72,
+        "peak_daily_dispatches": 149,
+        "mean_operational_fleet": 101.72,
+        "peak_operational_fleet": 149,
+        "mean_total_fleet_with_reserve": 112.42,
+        "peak_total_fleet_with_reserve": 164,
+        "mean_active_drivers_day": 203.45,
+        "peak_active_drivers_day": 298,
+        "mean_payroll_drivers_required": 253.67,
+        "peak_payroll_drivers_required": 371
+      },
+      "bogota_villavicencio": {
+        "vehicle_class": "BUS",
+        "cycle_time_hours": 8.0,
+        "vueltas_por_vehiculo_dia": 2.25,
+        "mean_daily_dispatches": 144.14,
+        "peak_daily_dispatches": 244,
+        "mean_operational_fleet": 45.17,
+        "peak_operational_fleet": 80,
+        "mean_total_fleet_with_reserve": 50.17,
+        "peak_total_fleet_with_reserve": 88,
+        "mean_active_drivers_day": 87.32,
+        "peak_active_drivers_day": 147,
+        "mean_payroll_drivers_required": 109.42,
+        "peak_payroll_drivers_required": 183
+      },
+      "pasto_ipiales": {
+        "vehicle_class": "MICROBUS",
+        "cycle_time_hours": 4.5,
+        "vueltas_por_vehiculo_dia": 4.0,
+        "mean_daily_dispatches": 266.37,
+        "peak_daily_dispatches": 340,
+        "mean_operational_fleet": 35.88,
+        "peak_operational_fleet": 46,
+        "mean_total_fleet_with_reserve": 39.97,
+        "peak_total_fleet_with_reserve": 51,
+        "mean_active_drivers_day": 90.83,
+        "peak_active_drivers_day": 116,
+        "mean_payroll_drivers_required": 113.72,
+        "peak_payroll_drivers_required": 145
+      }
+    },
+    "gru_p90_by_route": {
+      "63001_66001": {
+        "route_label": "Armenia -> Pereira",
+        "vehicle_class": "MICROBUS",
+        "nominal_capacity": 19,
+        "crew_per_dispatch": 1,
+        "mean_daily_demand": 1448.98,
+        "mean_daily_dispatches": 90.18,
+        "peak_daily_dispatches": 138,
+        "mean_active_drivers_day": 20.76,
+        "peak_active_drivers_day": 32,
+        "mean_payroll_drivers_required": 26.34,
+        "peak_payroll_drivers_required": 40
+      },
+      "66001_63001": {
+        "route_label": "Pereira -> Armenia",
+        "vehicle_class": "MICROBUS",
+        "nominal_capacity": 19,
+        "crew_per_dispatch": 1,
+        "mean_daily_demand": 2850.8,
+        "mean_daily_dispatches": 177.04,
+        "peak_daily_dispatches": 261,
+        "mean_active_drivers_day": 40.3,
+        "peak_active_drivers_day": 59,
+        "mean_payroll_drivers_required": 50.46,
+        "peak_payroll_drivers_required": 74
+      },
+      "11001_76001": {
+        "route_label": "Bogotá, D.C. -> Santiago de Cali",
+        "vehicle_class": "BUS",
+        "nominal_capacity": 42,
+        "crew_per_dispatch": 2,
+        "mean_daily_demand": 1895.95,
+        "mean_daily_dispatches": 53.6,
+        "peak_daily_dispatches": 82,
+        "mean_active_drivers_day": 107.2,
+        "peak_active_drivers_day": 164,
+        "mean_payroll_drivers_required": 133.64,
+        "peak_payroll_drivers_required": 204
+      },
+      "76001_11001": {
+        "route_label": "Santiago de Cali -> Bogotá, D.C.",
+        "vehicle_class": "BUS",
+        "nominal_capacity": 42,
+        "crew_per_dispatch": 2,
+        "mean_daily_demand": 1700.33,
+        "mean_daily_dispatches": 48.12,
+        "peak_daily_dispatches": 78,
+        "mean_active_drivers_day": 96.25,
+        "peak_active_drivers_day": 156,
+        "mean_payroll_drivers_required": 120.03,
+        "peak_payroll_drivers_required": 194
+      },
+      "11001_50001": {
+        "route_label": "Bogotá, D.C. -> Villavicencio",
+        "vehicle_class": "BUS",
+        "nominal_capacity": 42,
+        "crew_per_dispatch": 1,
+        "mean_daily_demand": 1536.1,
+        "mean_daily_dispatches": 43.53,
+        "peak_daily_dispatches": 95,
+        "mean_active_drivers_day": 26.54,
+        "peak_active_drivers_day": 57,
+        "mean_payroll_drivers_required": 33.47,
+        "peak_payroll_drivers_required": 71
+      },
+      "50001_11001": {
+        "route_label": "Villavicencio -> Bogotá, D.C.",
+        "vehicle_class": "BUS",
+        "nominal_capacity": 42,
+        "crew_per_dispatch": 1,
+        "mean_daily_demand": 3573.49,
+        "mean_daily_dispatches": 100.61,
+        "peak_daily_dispatches": 180,
+        "mean_active_drivers_day": 60.78,
+        "peak_active_drivers_day": 108,
+        "mean_payroll_drivers_required": 75.96,
+        "peak_payroll_drivers_required": 135
+      },
+      "52001_52356": {
+        "route_label": "Pasto -> Ipiales",
+        "vehicle_class": "MICROBUS",
+        "nominal_capacity": 19,
+        "crew_per_dispatch": 1,
+        "mean_daily_demand": 2033.5,
+        "mean_daily_dispatches": 126.4,
+        "peak_daily_dispatches": 184,
+        "mean_active_drivers_day": 43.18,
+        "peak_active_drivers_day": 63,
+        "mean_payroll_drivers_required": 54.06,
+        "peak_payroll_drivers_required": 79
+      },
+      "52356_52001": {
+        "route_label": "Ipiales -> Pasto",
+        "vehicle_class": "MICROBUS",
+        "nominal_capacity": 19,
+        "crew_per_dispatch": 1,
+        "mean_daily_demand": 2252.82,
+        "mean_daily_dispatches": 139.97,
+        "peak_daily_dispatches": 176,
+        "mean_active_drivers_day": 47.65,
+        "peak_active_drivers_day": 60,
+        "mean_payroll_drivers_required": 59.66,
+        "peak_payroll_drivers_required": 75
+      }
+    },
+    "sensitivity": {
+      "baseline_mean_total_fleet": 235.93,
+      "baseline_peak_total_fleet": 325,
+      "demand_sensitivity_curve": [
+        {
+          "demand_delta_pct": -10.0,
+          "demand_multiplier": 0.9,
+          "mean_total_fleet": 212.65,
+          "mean_fleet_change_pct": -9.87,
+          "peak_total_fleet": 293,
+          "mean_payroll_drivers": 499.3
+        },
+        {
+          "demand_delta_pct": -5.0,
+          "demand_multiplier": 0.95,
+          "mean_total_fleet": 224.47,
+          "mean_fleet_change_pct": -4.86,
+          "peak_total_fleet": 310,
+          "mean_payroll_drivers": 526.68
+        },
+        {
+          "demand_delta_pct": 0.0,
+          "demand_multiplier": 1.0,
+          "mean_total_fleet": 235.93,
+          "mean_fleet_change_pct": 0.0,
+          "peak_total_fleet": 325,
+          "mean_payroll_drivers": 553.61
+        },
+        {
+          "demand_delta_pct": 5.0,
+          "demand_multiplier": 1.05,
+          "mean_total_fleet": 247.37,
+          "mean_fleet_change_pct": 4.85,
+          "peak_total_fleet": 341,
+          "mean_payroll_drivers": 580.63
+        },
+        {
+          "demand_delta_pct": 10.0,
+          "demand_multiplier": 1.1,
+          "mean_total_fleet": 258.78,
+          "mean_fleet_change_pct": 9.69,
+          "peak_total_fleet": 358,
+          "mean_payroll_drivers": 607.88
+        }
+      ],
+      "parameter_tornado_pm10pct": [
+        {
+          "parameter": "Ocupación objetivo (rho)",
+          "fleet_at_minus_10pct": 261.5,
+          "fleet_at_plus_10pct": 214.89,
+          "delta_minus_10pct_vehicles": 25.57,
+          "delta_plus_10pct_vehicles": -21.04,
+          "total_swing_vehicles": 46.61,
+          "total_swing_pct": 19.76
+        },
+        {
+          "parameter": "Tiempo de ciclo (T_ciclo)",
+          "fleet_at_minus_10pct": 213.37,
+          "fleet_at_plus_10pct": 259.73,
+          "delta_minus_10pct_vehicles": -22.56,
+          "delta_plus_10pct_vehicles": 23.8,
+          "total_swing_vehicles": 46.36,
+          "total_swing_pct": 19.65
+        },
+        {
+          "parameter": "Capacidad vehicular (C_r)",
+          "fleet_at_minus_10pct": 260.96,
+          "fleet_at_plus_10pct": 215.22,
+          "delta_minus_10pct_vehicles": 25.03,
+          "delta_plus_10pct_vehicles": -20.71,
+          "total_swing_vehicles": 45.74,
+          "total_swing_pct": 19.39
+        },
+        {
+          "parameter": "Horas operación terminal (H_op)",
+          "fleet_at_minus_10pct": 249.43,
+          "fleet_at_plus_10pct": 225.23,
+          "delta_minus_10pct_vehicles": 13.5,
+          "delta_plus_10pct_vehicles": -10.7,
+          "total_swing_vehicles": 24.2,
+          "total_swing_pct": 10.26
+        },
+        {
+          "parameter": "Fracción reserva técnica",
+          "fleet_at_minus_10pct": 233.97,
+          "fleet_at_plus_10pct": 237.99,
+          "delta_minus_10pct_vehicles": -1.96,
+          "delta_plus_10pct_vehicles": 2.06,
+          "total_swing_vehicles": 4.02,
+          "total_swing_pct": 1.7
+        }
+      ],
+      "most_influential_parameter": "Ocupación objetivo (rho)",
+      "occupancy_ratio_sweep": [
+        {
+          "target_occupancy_ratio": 0.7,
+          "mean_total_fleet": 285.33,
+          "peak_total_fleet": 393
+        },
+        {
+          "target_occupancy_ratio": 0.75,
+          "mean_total_fleet": 266.58,
+          "peak_total_fleet": 369
+        },
+        {
+          "target_occupancy_ratio": 0.8,
+          "mean_total_fleet": 250.2,
+          "peak_total_fleet": 344
+        },
+        {
+          "target_occupancy_ratio": 0.85,
+          "mean_total_fleet": 235.93,
+          "peak_total_fleet": 325
+        },
+        {
+          "target_occupancy_ratio": 0.9,
+          "mean_total_fleet": 223.1,
+          "peak_total_fleet": 307
+        },
+        {
+          "target_occupancy_ratio": 0.95,
+          "mean_total_fleet": 211.49,
+          "peak_total_fleet": 290
+        }
+      ]
+    }
+  },
+  "q3_forecast_economic_value": {
+    "scenarios_test_184d": {
+      "Ridge Puntual": {
+        "total_real_passengers_test": 2481627,
+        "unmet_passengers_physical": 87535,
+        "unmet_passengers_pct_of_demand": 3.527,
+        "passengers_above_target_85pct_occ": 207607,
+        "surplus_vehicle_days": 3197,
+        "deficit_vehicle_days": 2673,
+        "mean_daily_operational_fleet": 165.29,
+        "mean_daily_total_fleet_with_reserve": 183.61,
+        "surplus_cost_cop": 1243740000.0,
+        "shortage_cost_cop": 4814425000.0,
+        "total_mismatch_cost_cop": 6058165000.0,
+        "normalized_cost_by_ratio_c_short_over_c_surplus": {
+          "0.02": 4947.7,
+          "0.05": 7573.75,
+          "0.10": 11950.5,
+          "0.15": 16327.25,
+          "0.20": 20704.0,
+          "0.30": 29457.5,
+          "0.50": 46964.5,
+          "1.00": 90732.0
+        }
+      },
+      "Ridge P90": {
+        "total_real_passengers_test": 2481627,
+        "unmet_passengers_physical": 15015,
+        "unmet_passengers_pct_of_demand": 0.605,
+        "passengers_above_target_85pct_occ": 49976,
+        "surplus_vehicle_days": 9095,
+        "deficit_vehicle_days": 549,
+        "mean_daily_operational_fleet": 208.89,
+        "mean_daily_total_fleet_with_reserve": 231.67,
+        "surplus_cost_cop": 3496800000.0,
+        "shortage_cost_cop": 825825000.0,
+        "total_mismatch_cost_cop": 4322625000.0,
+        "normalized_cost_by_ratio_c_short_over_c_surplus": {
+          "0.02": 9395.3,
+          "0.05": 9845.75,
+          "0.10": 10596.5,
+          "0.15": 11347.25,
+          "0.20": 12098.0,
+          "0.30": 13599.5,
+          "0.50": 16602.5,
+          "1.00": 24110.0
+        }
+      },
+      "GRU Puntual": {
+        "total_real_passengers_test": 2481627,
+        "unmet_passengers_physical": 47766,
+        "unmet_passengers_pct_of_demand": 1.925,
+        "passengers_above_target_85pct_occ": 133358,
+        "surplus_vehicle_days": 3879,
+        "deficit_vehicle_days": 1693,
+        "mean_daily_operational_fleet": 174.32,
+        "mean_daily_total_fleet_with_reserve": 193.43,
+        "surplus_cost_cop": 1518300000.0,
+        "shortage_cost_cop": 2627130000.0,
+        "total_mismatch_cost_cop": 4145430000.0,
+        "normalized_cost_by_ratio_c_short_over_c_surplus": {
+          "0.02": 4834.32,
+          "0.05": 6267.3,
+          "0.10": 8655.6,
+          "0.15": 11043.9,
+          "0.20": 13432.2,
+          "0.30": 18208.8,
+          "0.50": 27762.0,
+          "1.00": 51645.0
+        }
+      },
+      "GRU P90": {
+        "total_real_passengers_test": 2481627,
+        "unmet_passengers_physical": 7171,
+        "unmet_passengers_pct_of_demand": 0.289,
+        "passengers_above_target_85pct_occ": 27261,
+        "surplus_vehicle_days": 9523,
+        "deficit_vehicle_days": 271,
+        "mean_daily_operational_fleet": 212.72,
+        "mean_daily_total_fleet_with_reserve": 235.93,
+        "surplus_cost_cop": 3665760000.0,
+        "shortage_cost_cop": 394405000.0,
+        "total_mismatch_cost_cop": 4060165000.0,
+        "normalized_cost_by_ratio_c_short_over_c_surplus": {
+          "0.02": 9666.42,
+          "0.05": 9881.55,
+          "0.10": 10240.1,
+          "0.15": 10598.65,
+          "0.20": 10957.2,
+          "0.30": 11674.3,
+          "0.50": 13108.5,
+          "1.00": 16694.0
+        }
+      }
+    },
+    "p90_vs_point_thresholds": {
+      "GRU": {
+        "unmet_passengers_avoided_by_p90": 40595,
+        "extra_surplus_vehicle_days_of_p90": 5644,
+        "critical_ratio_c_corto_over_c_sobrante": 0.139,
+        "breakeven_c_corto_cop_at_ref_surplus_cost": 45881.0,
+        "configured_ratio_at_yaml_costs": 0.1667,
+        "p90_recommended_under_yaml_costs": true
+      },
+      "Ridge": {
+        "unmet_passengers_avoided_by_p90": 72520,
+        "extra_surplus_vehicle_days_of_p90": 5898,
+        "critical_ratio_c_corto_over_c_sobrante": 0.0813,
+        "breakeven_c_corto_cop_at_ref_surplus_cost": 26839.0,
+        "configured_ratio_at_yaml_costs": 0.1667,
+        "p90_recommended_under_yaml_costs": true
+      }
+    },
+    "gru_vs_ridge_operational_justification": {
+      "puntual_mismatch_savings_cop": 1912735000.0,
+      "p90_mismatch_savings_cop": 262460000.0,
+      "p90_surplus_vehicle_days_saved_by_gru": -428,
+      "p90_unmet_passengers_diff_gru_minus_ridge": -7844
+    }
+  },
+  "q4_high_season_analysis": {
+    "normal_week_window": "2023-09-11 a 2023-09-17",
+    "peak_week_window": "2023-12-22 a 2023-12-28",
+    "system_normal_week": {
+      "n_days": 7,
+      "target_occupancy_ratio": 0.85,
+      "demand_multiplier": 1.0,
+      "reserve_fleet_ratio": 0.1,
+      "mean_daily_dispatches": 701.43,
+      "peak_daily_dispatches": 782,
+      "mean_operational_fleet": 188.29,
+      "p90_operational_fleet": 198.4,
+      "peak_operational_fleet": 199,
+      "mean_total_fleet_with_reserve": 209.14,
+      "p90_total_fleet_with_reserve": 219.4,
+      "peak_total_fleet_with_reserve": 220,
+      "mean_active_drivers_day": 392.29,
+      "peak_active_drivers_day": 418,
+      "mean_payroll_drivers_total": 491.14,
+      "peak_payroll_drivers_total": 523
+    },
+    "system_peak_week": {
+      "n_days": 7,
+      "target_occupancy_ratio": 0.85,
+      "demand_multiplier": 1.0,
+      "reserve_fleet_ratio": 0.1,
+      "mean_daily_dispatches": 960.43,
+      "peak_daily_dispatches": 1079,
+      "mean_operational_fleet": 260.14,
+      "p90_operational_fleet": 285.8,
+      "peak_operational_fleet": 290,
+      "mean_total_fleet_with_reserve": 287.86,
+      "p90_total_fleet_with_reserve": 316.2,
+      "peak_total_fleet_with_reserve": 321,
+      "mean_active_drivers_day": 547.57,
+      "peak_active_drivers_day": 606,
+      "mean_payroll_drivers_total": 683.71,
+      "peak_payroll_drivers_total": 756
+    },
+    "additional_vehicles_at_december_peak": {
+      "BUS": 99,
+      "MICROBUS": 28,
+      "total_extra_vehicles": 127,
+      "total_extra_payroll_drivers": 265
+    },
+    "by_corridor_comparison": {
+      "armenia_pereira": {
+        "vehicle_class": "MICROBUS",
+        "normal_week_mean_fleet": 30.86,
+        "peak_week_mean_fleet": 40.43,
+        "peak_week_max_fleet": 49,
+        "additional_vehicles_needed_at_peak": 18,
+        "normal_week_mean_payroll_drivers": 70.0,
+        "peak_week_max_payroll_drivers": 110,
+        "additional_drivers_needed_at_peak": 40
+      },
+      "bogota_cali": {
+        "vehicle_class": "BUS",
+        "normal_week_mean_fleet": 102.57,
+        "peak_week_mean_fleet": 134.71,
+        "peak_week_max_fleet": 151,
+        "additional_vehicles_needed_at_peak": 48,
+        "normal_week_mean_payroll_drivers": 230.86,
+        "peak_week_max_payroll_drivers": 341,
+        "additional_drivers_needed_at_peak": 110
+      },
+      "bogota_villavicencio": {
+        "vehicle_class": "BUS",
+        "normal_week_mean_fleet": 36.43,
+        "peak_week_mean_fleet": 67.14,
+        "peak_week_max_fleet": 88,
+        "additional_vehicles_needed_at_peak": 51,
+        "normal_week_mean_payroll_drivers": 78.0,
+        "peak_week_max_payroll_drivers": 183,
+        "additional_drivers_needed_at_peak": 105
+      },
+      "pasto_ipiales": {
+        "vehicle_class": "MICROBUS",
+        "normal_week_mean_fleet": 39.29,
+        "peak_week_mean_fleet": 45.57,
+        "peak_week_max_fleet": 50,
+        "additional_vehicles_needed_at_peak": 10,
+        "normal_week_mean_payroll_drivers": 112.29,
+        "peak_week_max_payroll_drivers": 145,
+        "additional_drivers_needed_at_peak": 32
+      }
+    },
+    "sourcing_alternatives_annual_cost_cop": {
+      "assumed_peak_days_per_year": 52,
+      "1_own_fleet_for_peak_cop": 15846000000.0,
+      "2_seasonal_leased_fleet_cop": 3390660000.0,
+      "3_intercompany_collaboration_agreement_cop": 2172202906.0,
+      "recommended_hybrid_strategy": "Cubrir la demanda base (P50 valle) con flota propia, el escalón estacional sostenido de diciembre/mitad de año con fletamento/arrendamiento temporal y los picos extremos de 3-5 días (22-24 y 29-30 dic) mediante convenios de colaboración empresarial (Decreto 1079 de 2015)."
+    }
+  },
+  "figures_generated": [
+    "reports/figures/m1/fig_m1_06_flota_conductores_30d.png",
+    "reports/figures/m1/fig_m1_07_sensibilidad_flota.png"
+  ]
+}

@@ -19,6 +19,7 @@ paths:
   preprocess_summary_file: "reports/m1_preprocess_summary.json"
   eda_summary_file: "reports/metrics/m1_eda_summary.json"
   baselines_metrics_file: "reports/metrics/m1_baselines_metrics.json"
+  business_summary_file: "reports/metrics/m1_business_summary.json"
   hpo_results_file: "reports/metrics/m1_hpo_results.json"
   nn_metrics_file: "reports/metrics/m1_nn_metrics.json"
   history_dir: "reports/metrics"
@@ -30,6 +31,8 @@ paths:
   fig_forecast_vs_real: "reports/figures/m1/fig_m1_03_pronostico_vs_real.png"
   fig_error_by_horizon: "reports/figures/m1/fig_m1_04_error_por_horizonte.png"
   fig_30_seeds: "reports/figures/m1/fig_m1_05_comparacion_30_semillas.png"
+  fig_fleet_30d: "reports/figures/m1/fig_m1_06_flota_conductores_30d.png"
+  fig_fleet_sensitivity: "reports/figures/m1/fig_m1_07_sensibilidad_flota.png"
   model_dir: "models/m1"
   figures_dir: "reports/figures/m1"
   metrics_file: "reports/metrics/m1_metrics.json"
@@ -298,9 +301,9 @@ hpo:
 fleet_business:
   currency: "COP"
   default_vehicle_class: "BUS"
-  bus_capacity_passengers: 40 # Capacidad estándar de referencia (BUS intermunicipal)
+  bus_capacity_passengers: 42 # Capacidad nominal estándar de BUS intermunicipal (40-45 sillas)
   vehicle_capacities_passengers:
-    BUS: 40
+    BUS: 42
     BUSETA: 26
     MICROBUS: 19
     CAMIONETA: 9
@@ -315,8 +318,10 @@ fleet_business:
     "52356_52001": "MICROBUS"
     "11001_76001": "BUS"
     "76001_11001": "BUS"
-  target_occupancy_ratio: 0.80 # Factor de ocupación objetivo (80%)
-  service_level_quantile: 0.90 # Cuantil P90 para dimensionamiento con nivel de servicio seguro
+  target_occupancy_ratio: 0.85 # Factor de ocupación objetivo (rho = 0.85)
+  service_level_quantile: 0.90 # Cuantil P90 para dimensionamiento conservador
+  operating_hours_per_day: 18.0 # Ventana operativa diaria de despachos en terminal (horas)
+  reserve_fleet_ratio: 0.10 # Fracción de reserva técnica y mantenimiento preventivo/correctivo (10%)
   default_cycle_time_hours: 8.0
   route_cycle_time_hours:
     "11001_50001": 8.0
@@ -327,13 +332,39 @@ fleet_business:
     "52356_52001": 4.5
     "11001_76001": 24.0
     "76001_11001": 24.0
-  turnaround_buffer_hours: 1.0 # Tiempo mínimo de alistamiento/descanso en terminal entre despachos
-  operating_hours_per_day: 18.0 # Ventana operativa diaria de despachos en terminal (horas)
-  max_driver_shift_hours: 8.0 # Jornada ordinaria diaria máxima por conductor (horas)
-  max_weekly_driver_hours: 44.0 # Tope semanal legal de jornada laboral en Colombia (horas)
-  mandatory_break_minutes: 45 # Pausa activa / descanso obligatorio por turno (minutos)
-  driver_absenteeism_rate: 0.12 # Factor de cobertura por descansos dominicales, vacaciones e incapacidades
-  reserve_fleet_ratio: 0.10 # Reserva técnica por mantenimiento preventivo/correctivo
+  route_one_way_hours:
+    "11001_50001": 4.0
+    "50001_11001": 4.0
+    "63001_66001": 1.5
+    "66001_63001": 1.5
+    "52001_52356": 2.25
+    "52356_52001": 2.25
+    "11001_76001": 12.0
+    "76001_11001": 12.0
+  turnaround_buffer_hours: 1.0 # Alistamiento/descanso en terminal incluido en el ciclo
+
+  # ---------------------------------------------------------------------------
+  # Normativa laboral y de transporte terrestre en Colombia vigente a 2026:
+  # 1) Ley 2101 de 2021 (reducción gradual completa vigente desde el 15-jul-2026):
+  #    jornada laboral ordinaria máxima de 42.0 h/semana (~7.0 h/día en 6 días
+  #    laborables con 1 día de descanso obligatorio remunerado).
+  # 2) Decreto 1393 de 1970 (Art. 56) y Ley 2466 de 2025 (Art. 13):
+  #    tope diario de 10.0 h incluyendo máximo 2 h extra/día, integrando pausas
+  #    activas del Plan Estratégico de Seguridad Vial (PESV, Resolución 40595 de 2022).
+  # 3) Resolución 315 de 2013 del Ministerio de Transporte (Art. 6):
+  #    exige asignar segundo conductor (relevo a bordo) cuando el recorrido por
+  #    sentido supera las 8.0 horas (aplica automáticamente a Bogotá <-> Cali).
+  # ---------------------------------------------------------------------------
+  max_weekly_ordinary_hours: 42.0 # Ley 2101 de 2021 (vigencia plena 15-jul-2026)
+  ordinary_workdays_per_week: 6.0 # 6 días laborables + 1 día de descanso semanal
+  max_driver_shift_hours: 7.0 # Jornada ordinaria diaria promedio (42.0 / 6) para compatibilidad UI
+  max_daily_shift_hours: 10.0 # Decreto 1393 de 1970 Art. 56 y Ley 2466 de 2025 Art. 13
+  second_driver_threshold_hours: 8.0 # Resolución 315 de 2013 MinTransporte Art. 6
+  mandatory_break_minutes: 30 # Pausa activa PESV (Resolución 40595 de 2022)
+  weekly_rest_factor: 1.1667 # 7/6 para cubrir el día de descanso semanal en operación continua 7d
+  absenteeism_rate: 0.06 # Supuesto operativo configurable (vacaciones, incapacidades, licencias: 6%)
+
+  # Costos operativos y parámetros de evaluación económica en COP
   costs_cop:
     cost_per_dispatch_by_vehicle_cop:
       BUS: 1250000
@@ -342,7 +373,46 @@ fleet_business:
       CAMIONETA: 410000
       CAMPERO: 390000
       AUTOMOVIL: 260000
+    idle_vehicle_day_cost_by_class_cop:
+      BUS: 420000
+      BUSETA: 310000
+      MICROBUS: 240000
+      CAMIONETA: 180000
+      CAMPERO: 175000
+      AUTOMOVIL: 140000
+    idle_vehicle_day_cost_reference_cop: 330000 # Costo diario promedio ponderado flota mixta (BUS/MICROBUS)
+    unmet_passenger_penalty_cop: 55000 # Costo por pasajero sin atender (tarifa neta perdida + penalidad servicio)
     driver_daily_shift_cost_cop: 135000
     reserve_bus_daily_fixed_cost_cop: 180000
-    unmet_passenger_penalty_cop: 55000
     average_ticket_cop: 48000
+    shortage_to_surplus_cost_ratios:
+      - 0.02
+      - 0.05
+      - 0.10
+      - 0.15
+      - 0.20
+      - 0.30
+      - 0.50
+      - 1.00
+
+  # Parámetros para análisis de sensibilidad y temporada alta en test
+  analysis:
+    forecast_30d_origin_date: "2023-12-01" # Ventana pronosticada 30d: 2023-12-02 a 2023-12-31
+    peak_week_start: "2023-12-22"
+    peak_week_end: "2023-12-28"
+    normal_week_start: "2023-09-11"
+    normal_week_end: "2023-09-17"
+    estimated_peak_days_per_year: 52 # Semana Santa + mitad de año + diciembre + puentes festivos
+    demand_sensitivity_deltas:
+      - -0.10
+      - -0.05
+      - 0.00
+      - 0.05
+      - 0.10
+    parameter_perturbation_delta: 0.10 # Perturbación +-10% para análisis tornado
+    peak_sourcing_models:
+      own_vehicle_annual_fixed_cost_cop:
+        BUS: 138000000
+        MICROBUS: 78000000
+      leased_daily_cost_multiplier: 1.35 # Sobrecosto diario de fletamento/arriendo en temporada alta
+      intercompany_commission_rate: 0.12 # Comisión sobre ingreso bruto en convenios de colaboración empresarial

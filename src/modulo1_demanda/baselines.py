@@ -31,8 +31,6 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import QuantileRegressor, Ridge
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
@@ -299,6 +297,9 @@ class RidgeCalendarBaseline:
         self.quantile_alpha = float(quantile_alpha)
         self.quantile = float(quantile)
         self.include_interactions = bool(include_interactions)
+
+        from sklearn.linear_model import QuantileRegressor, Ridge
+        from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
         self.ohe_ = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
         self.scaler_ = StandardScaler()
