@@ -1,0 +1,507 @@
+{
+  "generated_at_utc": "2026-11-28T05:25:54.412728+00:00",
+  "evaluation_protocol": {
+    "method": "rolling_origin",
+    "forecast_horizon_days": 30,
+    "step_days": 7,
+    "mase_seasonality": 7,
+    "target_quantile": 0.9,
+    "val_n_origins": 22,
+    "val_first_origin": "2022-12-31",
+    "val_last_origin": "2023-05-27",
+    "test_n_origins": 23,
+    "test_first_origin": "2023-06-30",
+    "test_last_origin": "2023-12-01",
+    "mase_train_scales_by_route": {
+      "11001_50001": 222.2988,
+      "11001_76001": 293.3223,
+      "50001_11001": 602.7676,
+      "52001_52356": 153.4163,
+      "52356_52001": 168.9986,
+      "63001_66001": 139.7054,
+      "66001_63001": 223.325,
+      "76001_11001": 236.455
+    }
+  },
+  "models": {
+    "seasonal_naive": {
+      "description": "Repite los últimos 7 días observados en t_0 y suma para P90 el cuantil 0.90 empírico de residuales multi-paso de train por ruta.",
+      "n_parameters": 8,
+      "fit_and_eval_seconds": 1.9515,
+      "train_p90_residual_offsets": {
+        "11001_50001": 413.0,
+        "11001_76001": 559.0,
+        "50001_11001": 1292.1,
+        "52001_52356": 298.0,
+        "52356_52001": 355.1,
+        "63001_66001": 265.1,
+        "66001_63001": 423.5,
+        "76001_11001": 529.1
+      },
+      "val": {
+        "overall": {
+          "mae": 381.3771,
+          "rmse": 633.4911,
+          "mase": 1.428,
+          "pinball_p90": 97.7904,
+          "coverage_p90": 0.907,
+          "coverage_p90_pct": 90.7,
+          "n_forecasts": 5280
+        },
+        "by_horizon_block": {
+          "days_1_7": {
+            "mae": 342.1567,
+            "rmse": 582.477,
+            "mase": 1.2945,
+            "pinball_p90": 92.9202,
+            "coverage_p90": 0.9188,
+            "coverage_p90_pct": 91.88,
+            "n_forecasts": 1232
+          },
+          "days_8_14": {
+            "mae": 386.9407,
+            "rmse": 642.3775,
+            "mase": 1.4395,
+            "pinball_p90": 102.4192,
+            "coverage_p90": 0.8994,
+            "coverage_p90_pct": 89.94,
+            "n_forecasts": 1232
+          },
+          "days_15_30": {
+            "mae": 396.1019,
+            "rmse": 650.7607,
+            "mase": 1.4813,
+            "pinball_p90": 97.8961,
+            "coverage_p90": 0.9052,
+            "coverage_p90_pct": 90.52,
+            "n_forecasts": 2816
+          }
+        },
+        "by_route": {
+          "11001_50001": {
+            "mae": 384.0076,
+            "rmse": 588.25,
+            "mase": 1.7274,
+            "pinball_p90": 109.7132,
+            "coverage_p90": 0.8788,
+            "coverage_p90_pct": 87.88,
+            "n_forecasts": 660
+          },
+          "50001_11001": {
+            "mae": 1091.9364,
+            "rmse": 1405.8593,
+            "mase": 1.8115,
+            "pinball_p90": 256.4221,
+            "coverage_p90": 0.8576,
+            "coverage_p90_pct": 85.76,
+            "n_forecasts": 660
+          },
+          "63001_66001": {
+            "mae": 180.9288,
+            "rmse": 252.8667,
+            "mase": 1.2951,
+            "pinball_p90": 46.7345,
+            "coverage_p90": 0.9167,
+            "coverage_p90_pct": 91.67,
+            "n_forecasts": 660
+          },
+          "66001_63001": {
+            "mae": 323.8167,
+            "rmse": 489.9325,
+            "mase": 1.45,
+            "pinball_p90": 88.0336,
+            "coverage_p90": 0.8924,
+            "coverage_p90_pct": 89.24,
+            "n_forecasts": 660
+          },
+          "52001_52356": {
+            "mae": 213.147,
+            "rmse": 305.0331,
+            "mase": 1.3893,
+            "pinball_p90": 59.2738,
+            "coverage_p90": 0.9121,
+            "coverage_p90_pct": 91.21,
+            "n_forecasts": 660
+          },
+          "52356_52001": {
+            "mae": 217.2621,
+            "rmse": 308.5004,
+            "mase": 1.2856,
+            "pinball_p90": 58.3786,
+            "coverage_p90": 0.9242,
+            "coverage_p90_pct": 92.42,
+            "n_forecasts": 660
+          },
+          "11001_76001": {
+            "mae": 294.7076,
+            "rmse": 401.4453,
+            "mase": 1.0047,
+            "pinball_p90": 79.2432,
+            "coverage_p90": 0.9409,
+            "coverage_p90_pct": 94.09,
+            "n_forecasts": 660
+          },
+          "76001_11001": {
+            "mae": 345.2106,
+            "rmse": 484.415,
+            "mase": 1.4599,
+            "pinball_p90": 84.5244,
+            "coverage_p90": 0.9333,
+            "coverage_p90_pct": 93.33,
+            "n_forecasts": 660
+          }
+        }
+      },
+      "test": {
+        "overall": {
+          "mae": 361.827,
+          "rmse": 606.6065,
+          "mase": 1.33,
+          "pinball_p90": 84.6777,
+          "coverage_p90": 0.8933,
+          "coverage_p90_pct": 89.33,
+          "n_forecasts": 5520
+        },
+        "by_horizon_block": {
+          "days_1_7": {
+            "mae": 306.8214,
+            "rmse": 516.7402,
+            "mase": 1.1558,
+            "pinball_p90": 76.5307,
+            "coverage_p90": 0.913,
+            "coverage_p90_pct": 91.3,
+            "n_forecasts": 1288
+          },
+          "days_8_14": {
+            "mae": 364.4495,
+            "rmse": 620.1719,
+            "mase": 1.3188,
+            "pinball_p90": 81.4608,
+            "coverage_p90": 0.8905,
+            "coverage_p90_pct": 89.05,
+            "n_forecasts": 1288
+          },
+          "days_15_30": {
+            "mae": 384.7446,
+            "rmse": 636.2835,
+            "mase": 1.4111,
+            "pinball_p90": 89.6495,
+            "coverage_p90": 0.8859,
+            "coverage_p90_pct": 88.59,
+            "n_forecasts": 2944
+          }
+        },
+        "by_route": {
+          "11001_50001": {
+            "mae": 349.5145,
+            "rmse": 493.6896,
+            "mase": 1.5723,
+            "pinball_p90": 89.3216,
+            "coverage_p90": 0.8478,
+            "coverage_p90_pct": 84.78,
+            "n_forecasts": 690
+          },
+          "50001_11001": {
+            "mae": 1076.9768,
+            "rmse": 1411.2119,
+            "mase": 1.7867,
+            "pinball_p90": 232.5207,
+            "coverage_p90": 0.8522,
+            "coverage_p90_pct": 85.22,
+            "n_forecasts": 690
+          },
+          "63001_66001": {
+            "mae": 165.5565,
+            "rmse": 223.0744,
+            "mase": 1.185,
+            "pinball_p90": 39.0738,
+            "coverage_p90": 0.9014,
+            "coverage_p90_pct": 90.14,
+            "n_forecasts": 690
+          },
+          "66001_63001": {
+            "mae": 275.1449,
+            "rmse": 363.2001,
+            "mase": 1.232,
+            "pinball_p90": 63.7935,
+            "coverage_p90": 0.8899,
+            "coverage_p90_pct": 88.99,
+            "n_forecasts": 690
+          },
+          "52001_52356": {
+            "mae": 176.9594,
+            "rmse": 233.7214,
+            "mase": 1.1535,
+            "pinball_p90": 42.6351,
+            "coverage_p90": 0.9043,
+            "coverage_p90_pct": 90.43,
+            "n_forecasts": 690
+          },
+          "52356_52001": {
+            "mae": 193.1768,
+            "rmse": 251.8403,
+            "mase": 1.1431,
+            "pinball_p90": 44.6278,
+            "coverage_p90": 0.929,
+            "coverage_p90_pct": 92.9,
+            "n_forecasts": 690
+          },
+          "11001_76001": {
+            "mae": 258.9478,
+            "rmse": 349.8133,
+            "mase": 0.8828,
+            "pinball_p90": 66.0591,
+            "coverage_p90": 0.9391,
+            "coverage_p90_pct": 93.91,
+            "n_forecasts": 690
+          },
+          "76001_11001": {
+            "mae": 398.3391,
+            "rmse": 535.1893,
+            "mase": 1.6846,
+            "pinball_p90": 99.3901,
+            "coverage_p90": 0.8826,
+            "coverage_p90_pct": 88.26,
+            "n_forecasts": 690
+          }
+        }
+      }
+    },
+    "ridge_calendar": {
+      "description": "Modelo global Ridge (puntual) + QuantileRegressor P90 (HiGHS) sobre direct_tabular_h30_safe_features + calendario exógeno colombiano + route_id.",
+      "selected_ridge_alpha_on_val": 1.0,
+      "quantile_alpha": 0.001,
+      "feature_dim": 43,
+      "n_parameters": 88,
+      "fit_and_eval_seconds": 16.5571,
+      "val": {
+        "overall": {
+          "mae": 339.5234,
+          "rmse": 502.2869,
+          "mase": 1.396,
+          "pinball_p90": 83.9351,
+          "coverage_p90": 0.8661,
+          "coverage_p90_pct": 86.61,
+          "n_forecasts": 5280
+        },
+        "by_horizon_block": {
+          "days_1_7": {
+            "mae": 349.4763,
+            "rmse": 519.1434,
+            "mase": 1.4307,
+            "pinball_p90": 86.1626,
+            "coverage_p90": 0.858,
+            "coverage_p90_pct": 85.8,
+            "n_forecasts": 1232
+          },
+          "days_8_14": {
+            "mae": 339.4068,
+            "rmse": 502.3444,
+            "mase": 1.3923,
+            "pinball_p90": 83.5101,
+            "coverage_p90": 0.8669,
+            "coverage_p90_pct": 86.69,
+            "n_forecasts": 1232
+          },
+          "days_15_30": {
+            "mae": 335.2201,
+            "rmse": 494.7061,
+            "mase": 1.3825,
+            "pinball_p90": 83.1465,
+            "coverage_p90": 0.8693,
+            "coverage_p90_pct": 86.93,
+            "n_forecasts": 2816
+          }
+        },
+        "by_route": {
+          "11001_50001": {
+            "mae": 333.8128,
+            "rmse": 429.3391,
+            "mase": 1.5016,
+            "pinball_p90": 80.9924,
+            "coverage_p90": 0.8985,
+            "coverage_p90_pct": 89.85,
+            "n_forecasts": 660
+          },
+          "50001_11001": {
+            "mae": 802.8016,
+            "rmse": 1055.9721,
+            "mase": 1.3319,
+            "pinball_p90": 217.1478,
+            "coverage_p90": 0.8152,
+            "coverage_p90_pct": 81.52,
+            "n_forecasts": 660
+          },
+          "63001_66001": {
+            "mae": 215.1186,
+            "rmse": 271.3143,
+            "mase": 1.5398,
+            "pinball_p90": 41.4009,
+            "coverage_p90": 0.8621,
+            "coverage_p90_pct": 86.21,
+            "n_forecasts": 660
+          },
+          "66001_63001": {
+            "mae": 332.4369,
+            "rmse": 464.7962,
+            "mase": 1.4886,
+            "pinball_p90": 79.2097,
+            "coverage_p90": 0.8576,
+            "coverage_p90_pct": 85.76,
+            "n_forecasts": 660
+          },
+          "52001_52356": {
+            "mae": 267.3571,
+            "rmse": 354.9362,
+            "mase": 1.7427,
+            "pinball_p90": 68.1067,
+            "coverage_p90": 0.8288,
+            "coverage_p90_pct": 82.88,
+            "n_forecasts": 660
+          },
+          "52356_52001": {
+            "mae": 302.7702,
+            "rmse": 362.8374,
+            "mase": 1.7916,
+            "pinball_p90": 65.2082,
+            "coverage_p90": 0.7576,
+            "coverage_p90_pct": 75.76,
+            "n_forecasts": 660
+          },
+          "11001_76001": {
+            "mae": 221.0576,
+            "rmse": 273.7211,
+            "mase": 0.7536,
+            "pinball_p90": 56.5292,
+            "coverage_p90": 0.95,
+            "coverage_p90_pct": 95.0,
+            "n_forecasts": 660
+          },
+          "76001_11001": {
+            "mae": 240.8328,
+            "rmse": 311.0101,
+            "mase": 1.0185,
+            "pinball_p90": 62.8856,
+            "coverage_p90": 0.9591,
+            "coverage_p90_pct": 95.91,
+            "n_forecasts": 660
+          }
+        }
+      },
+      "test": {
+        "overall": {
+          "mae": 325.8015,
+          "rmse": 492.2807,
+          "mase": 1.2689,
+          "pinball_p90": 75.1479,
+          "coverage_p90": 0.8917,
+          "coverage_p90_pct": 89.17,
+          "n_forecasts": 5520
+        },
+        "by_horizon_block": {
+          "days_1_7": {
+            "mae": 322.3405,
+            "rmse": 498.9071,
+            "mase": 1.2385,
+            "pinball_p90": 76.4267,
+            "coverage_p90": 0.8859,
+            "coverage_p90_pct": 88.59,
+            "n_forecasts": 1288
+          },
+          "days_8_14": {
+            "mae": 314.5553,
+            "rmse": 479.9457,
+            "mase": 1.2163,
+            "pinball_p90": 72.1389,
+            "coverage_p90": 0.8952,
+            "coverage_p90_pct": 89.52,
+            "n_forecasts": 1288
+          },
+          "days_15_30": {
+            "mae": 332.2359,
+            "rmse": 494.6852,
+            "mase": 1.3053,
+            "pinball_p90": 75.9048,
+            "coverage_p90": 0.8927,
+            "coverage_p90_pct": 89.27,
+            "n_forecasts": 2944
+          }
+        },
+        "by_route": {
+          "11001_50001": {
+            "mae": 309.4192,
+            "rmse": 402.6961,
+            "mase": 1.3919,
+            "pinball_p90": 72.3234,
+            "coverage_p90": 0.8551,
+            "coverage_p90_pct": 85.51,
+            "n_forecasts": 690
+          },
+          "50001_11001": {
+            "mae": 889.0934,
+            "rmse": 1076.0854,
+            "mase": 1.475,
+            "pinball_p90": 207.5551,
+            "coverage_p90": 0.813,
+            "coverage_p90_pct": 81.3,
+            "n_forecasts": 690
+          },
+          "63001_66001": {
+            "mae": 165.6805,
+            "rmse": 199.5802,
+            "mase": 1.1859,
+            "pinball_p90": 33.6329,
+            "coverage_p90": 0.9478,
+            "coverage_p90_pct": 94.78,
+            "n_forecasts": 690
+          },
+          "66001_63001": {
+            "mae": 243.6378,
+            "rmse": 316.6815,
+            "mase": 1.091,
+            "pinball_p90": 55.1398,
+            "coverage_p90": 0.8913,
+            "coverage_p90_pct": 89.13,
+            "n_forecasts": 690
+          },
+          "52001_52356": {
+            "mae": 250.231,
+            "rmse": 303.1126,
+            "mase": 1.6311,
+            "pinball_p90": 56.1881,
+            "coverage_p90": 0.8391,
+            "coverage_p90_pct": 83.91,
+            "n_forecasts": 690
+          },
+          "52356_52001": {
+            "mae": 221.0631,
+            "rmse": 293.9918,
+            "mase": 1.3081,
+            "pinball_p90": 48.3543,
+            "coverage_p90": 0.9188,
+            "coverage_p90_pct": 91.88,
+            "n_forecasts": 690
+          },
+          "11001_76001": {
+            "mae": 196.9691,
+            "rmse": 254.9931,
+            "mase": 0.6715,
+            "pinball_p90": 54.1133,
+            "coverage_p90": 0.942,
+            "coverage_p90_pct": 94.2,
+            "n_forecasts": 690
+          },
+          "76001_11001": {
+            "mae": 330.3178,
+            "rmse": 484.9218,
+            "mase": 1.397,
+            "pinball_p90": 73.876,
+            "coverage_p90": 0.9261,
+            "coverage_p90_pct": 92.61,
+            "n_forecasts": 690
+          }
+        }
+      }
+    }
+  }
+}

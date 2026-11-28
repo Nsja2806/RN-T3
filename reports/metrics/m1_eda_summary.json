@@ -1,0 +1,361 @@
+{
+  "generated_at_utc": "2026-11-28T05:27:06.091147+00:00",
+  "source_dataset": "data/processed/m1/demanda_diaria.parquet",
+  "figures_generated": [
+    "reports\\figures\\m1\\fig_m1_01_series_demanda.png",
+    "reports\\figures\\m1\\fig_m1_02_descomposicion.png"
+  ],
+  "full_3year_daily_means_2021_2023": {
+    "by_year": {
+      "2021": 1061.98,
+      "2022": 1645.02,
+      "2023": 1719.03
+    },
+    "growth_2022_vs_2021_pct": 54.9,
+    "growth_2023_vs_2022_pct": 4.5,
+    "growth_2023_vs_2021_pct": 61.87
+  },
+  "train_val_hypotheses_verification": {
+    "h1_day_of_week_effect": {
+      "mean_by_day_of_week": {
+        "Lunes": 1496.05,
+        "Martes": 1357.12,
+        "Miércoles": 1326.28,
+        "Jueves": 1339.2,
+        "Viernes": 1544.14,
+        "Sábado": 1533.23,
+        "Domingo": 1432.88
+      },
+      "viernes_domingo_mean": 1488.73,
+      "martes_miercoles_mean": 1341.7,
+      "uplift_viernes_domingo_vs_martes_miercoles_pct": 10.96,
+      "mannwhitney_p_value": 6.2418047704207215e-12,
+      "confirmed": true,
+      "by_route": {
+        "11001_50001": {
+          "viernes_domingo_mean": 1038.24,
+          "martes_miercoles_mean": 950.15,
+          "uplift_pct": 9.27
+        },
+        "50001_11001": {
+          "viernes_domingo_mean": 2463.23,
+          "martes_miercoles_mean": 2252.45,
+          "uplift_pct": 9.36
+        },
+        "63001_66001": {
+          "viernes_domingo_mean": 1243.1,
+          "martes_miercoles_mean": 999.26,
+          "uplift_pct": 24.4
+        },
+        "66001_63001": {
+          "viernes_domingo_mean": 2195.13,
+          "martes_miercoles_mean": 1831.52,
+          "uplift_pct": 19.85
+        },
+        "52001_52356": {
+          "viernes_domingo_mean": 1403.77,
+          "martes_miercoles_mean": 1244.68,
+          "uplift_pct": 12.78
+        },
+        "52356_52001": {
+          "viernes_domingo_mean": 1248.35,
+          "martes_miercoles_mean": 1228.79,
+          "uplift_pct": 1.59
+        },
+        "11001_76001": {
+          "viernes_domingo_mean": 1215.73,
+          "martes_miercoles_mean": 1183.44,
+          "uplift_pct": 2.73
+        },
+        "76001_11001": {
+          "viernes_domingo_mean": 1102.27,
+          "martes_miercoles_mean": 1043.31,
+          "uplift_pct": 5.65
+        }
+      }
+    },
+    "h2_holidays_and_puentes_emiliani": {
+      "puente_festivo_mean": 1611.48,
+      "no_puente_mean": 1406.5,
+      "viernes_salida_puente_mean": 1751.66,
+      "lunes_retorno_puente_mean": 1639.0,
+      "holiday_day_mean": 1439.97,
+      "uplift_puente_vs_no_puente_pct": 14.57,
+      "uplift_viernes_salida_vs_no_puente_pct": 24.54,
+      "mannwhitney_p_value": 2.1996934861570147e-10,
+      "confirmed": true,
+      "by_route": {
+        "11001_50001": {
+          "puente_mean": 1280.4,
+          "no_puente_mean": 961.33,
+          "salida_puente_mean": 1657.73,
+          "retorno_puente_mean": 1007.46,
+          "uplift_puente_pct": 33.19
+        },
+        "50001_11001": {
+          "puente_mean": 2716.49,
+          "no_puente_mean": 2298.31,
+          "salida_puente_mean": 2786.2,
+          "retorno_puente_mean": 3506.46,
+          "uplift_puente_pct": 18.2
+        },
+        "63001_66001": {
+          "puente_mean": 1331.88,
+          "no_puente_mean": 1115.66,
+          "salida_puente_mean": 1240.5,
+          "retorno_puente_mean": 1360.46,
+          "uplift_puente_pct": 19.38
+        },
+        "66001_63001": {
+          "puente_mean": 2406.33,
+          "no_puente_mean": 2023.26,
+          "salida_puente_mean": 2353.5,
+          "retorno_puente_mean": 2277.46,
+          "uplift_puente_pct": 18.93
+        },
+        "52001_52356": {
+          "puente_mean": 1392.05,
+          "no_puente_mean": 1350.59,
+          "salida_puente_mean": 1683.3,
+          "retorno_puente_mean": 1119.92,
+          "uplift_puente_pct": 3.07
+        },
+        "52356_52001": {
+          "puente_mean": 1261.96,
+          "no_puente_mean": 1277.27,
+          "salida_puente_mean": 1445.9,
+          "retorno_puente_mean": 1353.27,
+          "uplift_puente_pct": -1.2
+        },
+        "11001_76001": {
+          "puente_mean": 1257.38,
+          "no_puente_mean": 1165.62,
+          "salida_puente_mean": 1580.9,
+          "retorno_puente_mean": 1137.0,
+          "uplift_puente_pct": 7.87
+        },
+        "76001_11001": {
+          "puente_mean": 1245.37,
+          "no_puente_mean": 1059.92,
+          "salida_puente_mean": 1265.27,
+          "retorno_puente_mean": 1350.0,
+          "uplift_puente_pct": 17.5
+        }
+      }
+    },
+    "h3_high_seasons_effect": {
+      "off_peak_baseline_mean": 1366.33,
+      "semana_santa_mean": 1710.07,
+      "uplift_semana_santa_pct": 25.16,
+      "mitad_anio_jun_jul_mean": 1404.56,
+      "uplift_mitad_anio_pct": 2.8,
+      "fin_anio_dic_ene_mean": 1653.1,
+      "uplift_fin_anio_pct": 20.99,
+      "diciembre_mean": 1850.98,
+      "uplift_diciembre_pct": 35.47
+    },
+    "h4_post_pandemic_and_paro_2021": {
+      "yearly_daily_mean_passengers": {
+        "2021": 1061.98,
+        "2022": 1645.02,
+        "2023": 1752.73
+      },
+      "growth_2022_vs_2021_pct": 54.9,
+      "growth_2023_vs_2022_pct": 6.55,
+      "paro_nacional_may_2021": {
+        "window": "2021-04-28 a 2021-06-15",
+        "may_2021_mean": 390.67,
+        "paro_window_mean": 534.85,
+        "rest_of_2021_mean": 1143.72,
+        "may_2021_drop_pct_vs_rest_2021": -65.84,
+        "by_route": {
+          "11001_50001": {
+            "may_2021_mean": 275.0,
+            "rest_of_2021_mean": 651.88,
+            "drop_pct_vs_rest_of_2021": -57.81
+          },
+          "11001_76001": {
+            "may_2021_mean": 5.13,
+            "rest_of_2021_mean": 1104.06,
+            "drop_pct_vs_rest_of_2021": -99.54
+          },
+          "50001_11001": {
+            "may_2021_mean": 708.87,
+            "rest_of_2021_mean": 1718.14,
+            "drop_pct_vs_rest_of_2021": -58.74
+          },
+          "52001_52356": {
+            "may_2021_mean": 238.94,
+            "rest_of_2021_mean": 1023.31,
+            "drop_pct_vs_rest_of_2021": -76.65
+          },
+          "52356_52001": {
+            "may_2021_mean": 225.48,
+            "rest_of_2021_mean": 870.67,
+            "drop_pct_vs_rest_of_2021": -74.1
+          },
+          "63001_66001": {
+            "may_2021_mean": 715.0,
+            "rest_of_2021_mean": 1055.01,
+            "drop_pct_vs_rest_of_2021": -32.23
+          },
+          "66001_63001": {
+            "may_2021_mean": 948.77,
+            "rest_of_2021_mean": 1824.12,
+            "drop_pct_vs_rest_of_2021": -47.99
+          },
+          "76001_11001": {
+            "may_2021_mean": 8.19,
+            "rest_of_2021_mean": 902.57,
+            "drop_pct_vs_rest_of_2021": -99.09
+          }
+        }
+      }
+    }
+  },
+  "test_behavior_documentation": {
+    "h1_day_of_week_effect": {
+      "mean_by_day_of_week": {
+        "Lunes": 1700.75,
+        "Martes": 1587.4,
+        "Miércoles": 1594.64,
+        "Jueves": 1593.88,
+        "Viernes": 1870.44,
+        "Sábado": 1860.73,
+        "Domingo": 1590.33
+      },
+      "viernes_domingo_mean": 1727.74,
+      "martes_miercoles_mean": 1591.02,
+      "uplift_viernes_domingo_vs_martes_miercoles_pct": 8.59,
+      "mannwhitney_p_value": 0.004911321893615165,
+      "confirmed": true,
+      "by_route": {
+        "11001_50001": {
+          "viernes_domingo_mean": 1183.11,
+          "martes_miercoles_mean": 1112.06,
+          "uplift_pct": 6.39
+        },
+        "50001_11001": {
+          "viernes_domingo_mean": 2532.36,
+          "martes_miercoles_mean": 2458.17,
+          "uplift_pct": 3.02
+        },
+        "63001_66001": {
+          "viernes_domingo_mean": 1304.85,
+          "martes_miercoles_mean": 1024.44,
+          "uplift_pct": 27.37
+        },
+        "66001_63001": {
+          "viernes_domingo_mean": 2594.49,
+          "martes_miercoles_mean": 2146.29,
+          "uplift_pct": 20.88
+        },
+        "52001_52356": {
+          "viernes_domingo_mean": 1797.79,
+          "martes_miercoles_mean": 1550.38,
+          "uplift_pct": 15.96
+        },
+        "52356_52001": {
+          "viernes_domingo_mean": 1772.34,
+          "martes_miercoles_mean": 1777.52,
+          "uplift_pct": -0.29
+        },
+        "11001_76001": {
+          "viernes_domingo_mean": 1459.58,
+          "martes_miercoles_mean": 1405.25,
+          "uplift_pct": 3.87
+        },
+        "76001_11001": {
+          "viernes_domingo_mean": 1177.4,
+          "martes_miercoles_mean": 1254.06,
+          "uplift_pct": -6.11
+        }
+      }
+    },
+    "h2_holidays_and_puentes_emiliani": {
+      "puente_festivo_mean": 1894.88,
+      "no_puente_mean": 1640.21,
+      "viernes_salida_puente_mean": 2096.2,
+      "lunes_retorno_puente_mean": 1901.64,
+      "holiday_day_mean": 1837.32,
+      "uplift_puente_vs_no_puente_pct": 15.53,
+      "uplift_viernes_salida_vs_no_puente_pct": 27.8,
+      "mannwhitney_p_value": 1.017244263651908e-06,
+      "confirmed": true,
+      "by_route": {
+        "11001_50001": {
+          "puente_mean": 1465.48,
+          "no_puente_mean": 1088.36,
+          "salida_puente_mean": 2014.62,
+          "retorno_puente_mean": 1130.43,
+          "uplift_puente_pct": 34.65
+        },
+        "50001_11001": {
+          "puente_mean": 2872.88,
+          "no_puente_mean": 2408.74,
+          "salida_puente_mean": 2879.38,
+          "retorno_puente_mean": 4000.57,
+          "uplift_puente_pct": 19.27
+        },
+        "63001_66001": {
+          "puente_mean": 1489.79,
+          "no_puente_mean": 1145.07,
+          "salida_puente_mean": 1328.25,
+          "retorno_puente_mean": 1615.71,
+          "uplift_puente_pct": 30.1
+        },
+        "66001_63001": {
+          "puente_mean": 2921.45,
+          "no_puente_mean": 2339.54,
+          "salida_puente_mean": 2856.62,
+          "retorno_puente_mean": 2700.29,
+          "uplift_puente_pct": 24.87
+        },
+        "52001_52356": {
+          "puente_mean": 1853.12,
+          "no_puente_mean": 1683.03,
+          "salida_puente_mean": 2244.88,
+          "retorno_puente_mean": 1322.43,
+          "uplift_puente_pct": 10.11
+        },
+        "52356_52001": {
+          "puente_mean": 1865.06,
+          "no_puente_mean": 1839.71,
+          "salida_puente_mean": 2138.75,
+          "retorno_puente_mean": 1903.43,
+          "uplift_puente_pct": 1.38
+        },
+        "11001_76001": {
+          "puente_mean": 1568.12,
+          "no_puente_mean": 1384.82,
+          "salida_puente_mean": 2124.25,
+          "retorno_puente_mean": 1422.57,
+          "uplift_puente_pct": 13.24
+        },
+        "76001_11001": {
+          "puente_mean": 1123.12,
+          "no_puente_mean": 1232.43,
+          "salida_puente_mean": 1182.88,
+          "retorno_puente_mean": 1117.71,
+          "uplift_puente_pct": -8.87
+        }
+      }
+    },
+    "h3_high_seasons_effect": {
+      "off_peak_baseline_mean": 1605.9,
+      "semana_santa_mean": null,
+      "uplift_semana_santa_pct": null,
+      "mitad_anio_jun_jul_mean": 1768.74,
+      "uplift_mitad_anio_pct": 10.14,
+      "fin_anio_dic_ene_mean": 1917.82,
+      "uplift_fin_anio_pct": 19.42,
+      "diciembre_mean": 1917.82,
+      "uplift_diciembre_pct": 19.42
+    },
+    "h4_post_pandemic_and_paro_2021": {
+      "yearly_daily_mean_passengers": {
+        "2023": 1685.89
+      }
+    }
+  }
+}

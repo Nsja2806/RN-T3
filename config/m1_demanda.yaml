@@ -17,6 +17,8 @@ paths:
   processed_dataset_file: "data/processed/m1/demanda_diaria.parquet"
   calendar_exog_file: "data/processed/m1/calendario_exogenas.csv"
   preprocess_summary_file: "reports/m1_preprocess_summary.json"
+  eda_summary_file: "reports/metrics/m1_eda_summary.json"
+  baselines_metrics_file: "reports/metrics/m1_baselines_metrics.json"
   model_dir: "models/m1"
   figures_dir: "reports/figures/m1"
   metrics_file: "reports/metrics/m1_metrics.json"
@@ -156,6 +158,20 @@ data:
   test_ratio: 0.1680
   scaler: "standard" # "standard", "minmax", "robust"
 
+eda:
+  dpi: 300
+  rolling_smooth_days: 14
+  fig_series_filename: "fig_m1_01_series_demanda.png"
+  fig_decomposition_filename: "fig_m1_02_descomposicion.png"
+  decomposition_routes:
+    - "11001_50001"
+    - "11001_76001"
+  mstl_periods:
+    - 7
+    - 365
+  paro_nacional_start: "2021-04-28"
+  paro_nacional_end: "2021-06-15"
+
 time_series:
   lookback_window: 28 # 4 semanas de historia diaria
   forecast_horizon: 30 # Pronóstico a 30 días
@@ -176,6 +192,31 @@ time_series:
   quantiles:
     - 0.50
     - 0.90
+
+evaluation:
+  rolling_origin_step_days: 7 # Ventanas de 30 días desplazadas cada 7 días en val y test
+  mase_seasonality: 7 # Escala estacional semanal m=7 sobre train
+  target_quantile: 0.90
+  horizon_blocks:
+    days_1_7:
+      - 1
+      - 7
+    days_8_14:
+      - 8
+      - 14
+    days_15_30:
+      - 15
+      - 30
+
+baselines:
+  ridge_alpha_grid:
+    - 0.1
+    - 1.0
+    - 10.0
+    - 50.0
+    - 100.0
+  quantile_alpha: 0.001
+  include_route_calendar_interactions: true
 
 model:
   architecture: "gru" # Optimizado para CPU ("gru", "lstm", "mlp")
