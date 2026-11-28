@@ -1,0 +1,269 @@
+{
+  "timestamp_utc": "2026-11-28T05:49:59.149613+00:00",
+  "metadata": {
+    "mode": "single",
+    "seed": 42
+  },
+  "metrics": {
+    "mlp": {
+      "hparams": {
+        "hidden_size": 32,
+        "num_layers": 2,
+        "dropout": 0.2,
+        "learning_rate": 0.003,
+        "weight_decay": 1e-05
+      },
+      "history": {
+        "best_epoch": 10,
+        "best_val_loss": 1.036368489265442,
+        "epochs_run": 18,
+        "train_seconds": 6.742,
+        "n_parameters": 17756
+      },
+      "val": {
+        "overall": {
+          "mae": 294.9558,
+          "rmse": 459.4552,
+          "mase": 1.1718,
+          "pinball_p90": 80.957,
+          "coverage_p90": 0.9169,
+          "coverage_p90_pct": 91.69,
+          "n_forecasts": 5280
+        },
+        "by_horizon_block": {
+          "days_1_7": {
+            "mae": 287.3387,
+            "rmse": 455.6144,
+            "mase": 1.1387,
+            "pinball_p90": 79.4797,
+            "coverage_p90": 0.918,
+            "coverage_p90_pct": 91.8,
+            "n_forecasts": 1232
+          },
+          "days_8_14": {
+            "mae": 289.3864,
+            "rmse": 454.7792,
+            "mase": 1.141,
+            "pinball_p90": 78.5074,
+            "coverage_p90": 0.9148,
+            "coverage_p90_pct": 91.48,
+            "n_forecasts": 1232
+          },
+          "days_15_30": {
+            "mae": 300.7248,
+            "rmse": 463.149,
+            "mase": 1.1997,
+            "pinball_p90": 82.675,
+            "coverage_p90": 0.9173,
+            "coverage_p90_pct": 91.73,
+            "n_forecasts": 2816
+          }
+        },
+        "by_route": {
+          "11001_50001": {
+            "mae": 275.9956,
+            "rmse": 384.4771,
+            "mase": 1.2416,
+            "pinball_p90": 88.3895,
+            "coverage_p90": 0.8848,
+            "coverage_p90_pct": 88.48,
+            "n_forecasts": 660
+          },
+          "50001_11001": {
+            "mae": 745.6363,
+            "rmse": 992.4994,
+            "mase": 1.237,
+            "pinball_p90": 200.6151,
+            "coverage_p90": 0.8576,
+            "coverage_p90_pct": 85.76,
+            "n_forecasts": 660
+          },
+          "63001_66001": {
+            "mae": 138.1418,
+            "rmse": 195.9574,
+            "mase": 0.9888,
+            "pinball_p90": 43.0453,
+            "coverage_p90": 0.9379,
+            "coverage_p90_pct": 93.79,
+            "n_forecasts": 660
+          },
+          "66001_63001": {
+            "mae": 264.6247,
+            "rmse": 389.09,
+            "mase": 1.1849,
+            "pinball_p90": 81.1717,
+            "coverage_p90": 0.9303,
+            "coverage_p90_pct": 93.03,
+            "n_forecasts": 660
+          },
+          "52001_52356": {
+            "mae": 243.745,
+            "rmse": 303.4586,
+            "mase": 1.5888,
+            "pinball_p90": 56.802,
+            "coverage_p90": 0.9333,
+            "coverage_p90_pct": 93.33,
+            "n_forecasts": 660
+          },
+          "52356_52001": {
+            "mae": 226.175,
+            "rmse": 288.8495,
+            "mase": 1.3383,
+            "pinball_p90": 56.3186,
+            "coverage_p90": 0.9667,
+            "coverage_p90_pct": 96.67,
+            "n_forecasts": 660
+          },
+          "11001_76001": {
+            "mae": 211.2434,
+            "rmse": 286.7829,
+            "mase": 0.7202,
+            "pinball_p90": 58.9943,
+            "coverage_p90": 0.9258,
+            "coverage_p90_pct": 92.58,
+            "n_forecasts": 660
+          },
+          "76001_11001": {
+            "mae": 254.0843,
+            "rmse": 329.1792,
+            "mase": 1.0746,
+            "pinball_p90": 62.3194,
+            "coverage_p90": 0.8985,
+            "coverage_p90_pct": 89.85,
+            "n_forecasts": 660
+          }
+        }
+      }
+    },
+    "gru": {
+      "hparams": {
+        "hidden_size": 64,
+        "num_layers": 1,
+        "dropout": 0.3,
+        "learning_rate": 0.003,
+        "weight_decay": 1e-05
+      },
+      "history": {
+        "best_epoch": 11,
+        "best_val_loss": 1.0195049047470093,
+        "epochs_run": 19,
+        "train_seconds": 52.815,
+        "n_parameters": 21442
+      },
+      "val": {
+        "overall": {
+          "mae": 258.6126,
+          "rmse": 425.6072,
+          "mase": 0.9926,
+          "pinball_p90": 63.5107,
+          "coverage_p90": 0.8919,
+          "coverage_p90_pct": 89.19,
+          "n_forecasts": 5280
+        },
+        "by_horizon_block": {
+          "days_1_7": {
+            "mae": 251.1576,
+            "rmse": 422.1532,
+            "mase": 0.9665,
+            "pinball_p90": 63.1165,
+            "coverage_p90": 0.8961,
+            "coverage_p90_pct": 89.61,
+            "n_forecasts": 1232
+          },
+          "days_8_14": {
+            "mae": 254.8697,
+            "rmse": 424.3377,
+            "mase": 0.9729,
+            "pinball_p90": 63.5489,
+            "coverage_p90": 0.8961,
+            "coverage_p90_pct": 89.61,
+            "n_forecasts": 1232
+          },
+          "days_15_30": {
+            "mae": 263.5116,
+            "rmse": 427.6618,
+            "mase": 1.0127,
+            "pinball_p90": 63.6664,
+            "coverage_p90": 0.8881,
+            "coverage_p90_pct": 88.81,
+            "n_forecasts": 2816
+          }
+        },
+        "by_route": {
+          "11001_50001": {
+            "mae": 206.9009,
+            "rmse": 276.9015,
+            "mase": 0.9307,
+            "pinball_p90": 45.8558,
+            "coverage_p90": 0.9394,
+            "coverage_p90_pct": 93.94,
+            "n_forecasts": 660
+          },
+          "50001_11001": {
+            "mae": 750.8401,
+            "rmse": 982.2425,
+            "mase": 1.2457,
+            "pinball_p90": 185.0502,
+            "coverage_p90": 0.8136,
+            "coverage_p90_pct": 81.36,
+            "n_forecasts": 660
+          },
+          "63001_66001": {
+            "mae": 125.2169,
+            "rmse": 173.3604,
+            "mase": 0.8963,
+            "pinball_p90": 30.4281,
+            "coverage_p90": 0.947,
+            "coverage_p90_pct": 94.7,
+            "n_forecasts": 660
+          },
+          "66001_63001": {
+            "mae": 235.813,
+            "rmse": 349.2708,
+            "mase": 1.0559,
+            "pinball_p90": 60.4419,
+            "coverage_p90": 0.9136,
+            "coverage_p90_pct": 91.36,
+            "n_forecasts": 660
+          },
+          "52001_52356": {
+            "mae": 186.2661,
+            "rmse": 243.7048,
+            "mase": 1.2141,
+            "pinball_p90": 40.9985,
+            "coverage_p90": 0.8818,
+            "coverage_p90_pct": 88.18,
+            "n_forecasts": 660
+          },
+          "52356_52001": {
+            "mae": 204.0062,
+            "rmse": 267.2135,
+            "mase": 1.2071,
+            "pinball_p90": 47.8596,
+            "coverage_p90": 0.8409,
+            "coverage_p90_pct": 84.09,
+            "n_forecasts": 660
+          },
+          "11001_76001": {
+            "mae": 159.6398,
+            "rmse": 218.138,
+            "mase": 0.5442,
+            "pinball_p90": 40.9661,
+            "coverage_p90": 0.9197,
+            "coverage_p90_pct": 91.97,
+            "n_forecasts": 660
+          },
+          "76001_11001": {
+            "mae": 200.2175,
+            "rmse": 277.9098,
+            "mase": 0.8467,
+            "pinball_p90": 56.485,
+            "coverage_p90": 0.8788,
+            "coverage_p90_pct": 87.88,
+            "n_forecasts": 660
+          }
+        }
+      }
+    }
+  }
+}

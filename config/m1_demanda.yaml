@@ -19,6 +19,17 @@ paths:
   preprocess_summary_file: "reports/m1_preprocess_summary.json"
   eda_summary_file: "reports/metrics/m1_eda_summary.json"
   baselines_metrics_file: "reports/metrics/m1_baselines_metrics.json"
+  hpo_results_file: "reports/metrics/m1_hpo_results.json"
+  nn_metrics_file: "reports/metrics/m1_nn_metrics.json"
+  history_dir: "reports/metrics"
+  best_hparams_file: "models/m1/best_hparams.json"
+  scalers_file: "models/m1/scalers.json"
+  demo_model_dir: "models/m1/demo"
+  fig_hpo: "reports/figures/m1/fig_m1_hpo.png"
+  fig_learning_curves: "reports/figures/m1/fig_m1_learning_curves.png"
+  fig_forecast_vs_real: "reports/figures/m1/fig_m1_03_pronostico_vs_real.png"
+  fig_error_by_horizon: "reports/figures/m1/fig_m1_04_error_por_horizonte.png"
+  fig_30_seeds: "reports/figures/m1/fig_m1_05_comparacion_30_semillas.png"
   model_dir: "models/m1"
   figures_dir: "reports/figures/m1"
   metrics_file: "reports/metrics/m1_metrics.json"
@@ -219,11 +230,21 @@ baselines:
   include_route_calendar_interactions: true
 
 model:
-  architecture: "gru" # Optimizado para CPU ("gru", "lstm", "mlp")
-  hidden_size: 32
-  num_layers: 1
-  dropout: 0.15
+  architecture: "gru" # Arquitectura principal ("mlp", "gru"); --arch all entrena ambas
   route_embedding_dim: 8
+  # Escala por ventana: s = max(media_28d, scale_floor_frac * media_train_ruta, 1).
+  # Historia y objetivo se dividen por s (normalización de nivel por instancia) y la
+  # salida (mu, q90) se multiplica por s para volver a pasajeros. Absorbe la tendencia
+  # 2021-2023 y el colapso del Paro Nacional sin dividir por ~0.
+  scale_floor_frac: 0.25
+  mlp:
+    hidden_size: 64
+    num_layers: 2
+    dropout: 0.15
+  gru:
+    hidden_size: 32
+    num_layers: 1
+    dropout: 0.15
 
 training:
   batch_size: 64
@@ -235,9 +256,9 @@ training:
   loss: "poisson_pinball" # Pérdida híbrida: conteo (poisson_nll para media/P50) + pinball (P90)
   count_loss: "poisson_nll"
   quantile_loss: "pinball"
-  count_loss_weight: 0.50
-  pinball_loss_weight: 0.50
+  lambda_pinball: 1.0 # loss = poisson_nll(y, mu) + lambda_pinball * pinball_P90(y, q90)
   pinball_quantile: 0.90
+  torch_num_threads: 4 # Modelos pequeños en CPU: pocos hilos evitan sobrecosto de sincronización
   modes:
     demo:
       epochs: 3
@@ -251,6 +272,28 @@ training:
       epochs: 50
       max_samples: null
       n_seeds: 30
+
+# Búsqueda de hiperparámetros (--mode hpo): presupuesto acotado y explícito para CPU.
+# 6 configuraciones por arquitectura, evaluadas en val con early stopping; se elige la de menor MAE en val.
+hpo:
+  epochs: 40
+  early_stopping_patience: 6
+  selection_metric: "mae"
+  configs:
+    mlp:
+      - {hidden_size: 32, dropout: 0.10, learning_rate: 0.001, weight_decay: 0.0001}
+      - {hidden_size: 64, dropout: 0.15, learning_rate: 0.001, weight_decay: 0.0001}
+      - {hidden_size: 64, dropout: 0.30, learning_rate: 0.0005, weight_decay: 0.001}
+      - {hidden_size: 128, dropout: 0.20, learning_rate: 0.001, weight_decay: 0.0001}
+      - {hidden_size: 128, dropout: 0.30, learning_rate: 0.003, weight_decay: 0.001}
+      - {hidden_size: 32, dropout: 0.20, learning_rate: 0.003, weight_decay: 0.00001}
+    gru:
+      - {hidden_size: 16, dropout: 0.10, learning_rate: 0.001, weight_decay: 0.0001}
+      - {hidden_size: 32, dropout: 0.15, learning_rate: 0.001, weight_decay: 0.0001}
+      - {hidden_size: 32, dropout: 0.30, learning_rate: 0.003, weight_decay: 0.0001}
+      - {hidden_size: 64, dropout: 0.15, learning_rate: 0.001, weight_decay: 0.001}
+      - {hidden_size: 64, dropout: 0.30, learning_rate: 0.003, weight_decay: 0.00001}
+      - {hidden_size: 32, dropout: 0.10, learning_rate: 0.005, weight_decay: 0.001}
 
 fleet_business:
   currency: "COP"

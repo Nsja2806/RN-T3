@@ -68,11 +68,18 @@ def build_parser() -> argparse.ArgumentParser:
     train_parser.add_argument(
         "--mode",
         default="demo",
-        choices=["demo", "single", "eval30"],
+        choices=["demo", "single", "eval30", "hpo"],
         help=(
             "Modo de ejecución: 'demo' (<60s), 'single' (1 semilla completa) "
-            "o 'eval30' (30 semillas con reporte media/std/min/max)."
+            "o 'eval30' (30 semillas con reporte media/std/min/max). "
+            "'hpo' (búsqueda de hiperparámetros acotada) está disponible solo en m1."
         ),
+    )
+    train_parser.add_argument(
+        "--arch",
+        default="all",
+        choices=["mlp", "gru", "all"],
+        help="Arquitectura neuronal a entrenar (solo m1): mlp, gru o all (por defecto).",
     )
     train_parser.add_argument(
         "--seed",
@@ -149,7 +156,10 @@ def _handle_train(args: argparse.Namespace) -> int:
 
     pkg = MODULE_PACKAGE_MAP[args.module]
     train_mod = importlib.import_module(f"{pkg}.train")
-    train_mod.run_train(config=config, mode=args.mode)
+    extra_kwargs = {"arch": args.arch} if args.module == "m1" else {}
+    if args.mode == "hpo" and args.module != "m1":
+        raise SystemExit("El modo 'hpo' solo está implementado para el módulo m1.")
+    train_mod.run_train(config=config, mode=args.mode, **extra_kwargs)
     return 0
 
 

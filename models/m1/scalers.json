@@ -1,0 +1,41 @@
+{
+  "route_ids": [
+    "11001_50001",
+    "50001_11001",
+    "63001_66001",
+    "66001_63001",
+    "52001_52356",
+    "52356_52001",
+    "11001_76001",
+    "76001_11001"
+  ],
+  "route_train_mean": [
+    934.8479614257812,
+    2127.335693359375,
+    1135.982177734375,
+    2011.215087890625,
+    1268.257568359375,
+    1147.4383544921875,
+    1156.8192138671875,
+    1046.1287841796875
+  ],
+  "scale_floor_frac": 0.25,
+  "calendar_cols": [
+    "dow_sin",
+    "dow_cos",
+    "month_sin",
+    "month_cos",
+    "doy_sin",
+    "doy_cos",
+    "is_weekend",
+    "is_holiday_co",
+    "is_puente_festivo",
+    "is_salida_puente",
+    "is_retorno_puente",
+    "is_semana_santa",
+    "is_temporada_mitad_anio",
+    "is_temporada_fin_anio"
+  ],
+  "lookback": 28,
+  "horizon": 30
+}

@@ -1,0 +1,24 @@
+{
+  "mlp": {
+    "hparams": {
+      "hidden_size": 32,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "learning_rate": 0.003,
+      "weight_decay": 1e-05
+    },
+    "config_id": 6,
+    "val_mae": 294.9558
+  },
+  "gru": {
+    "hparams": {
+      "hidden_size": 64,
+      "num_layers": 1,
+      "dropout": 0.3,
+      "learning_rate": 0.003,
+      "weight_decay": 1e-05
+    },
+    "config_id": 5,
+    "val_mae": 258.6126
+  }
+}
